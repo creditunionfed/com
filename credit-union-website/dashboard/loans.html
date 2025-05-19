@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for Loan | Community Credit Union</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Dashboard Navigation -->
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../images/logo-white.png" alt="Community Credit Union" class="sidebar-logo">
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-info">
+                    <h3>Laura Jewelry Co</h3>
+                    <p>Business Account</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="index.html">
+                            <i class="fas fa-home"></i>
+                            <span>Account Overview</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="transactions.html">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Transaction History</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="transfer.html">
+                            <i class="fas fa-money-bill-transfer"></i>
+                            <span>Transfer Funds</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="loans.html">
+                            <i class="fas fa-hand-holding-usd"></i>
+                            <span>Apply for Loan</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="settings.html">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../index.html" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Navigation -->
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <button class="sidebar-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1>Apply for Loan</h1>
+                </div>
+                <div class="header-right">
+                    <div class="notifications">
+                        <button class="notification-btn">
+                            <i class="fas fa-bell"></i>
+                            <span class="badge">3</span>
+                        </button>
+                    </div>
+                    <div class="user-menu">
+                        <button class="user-btn">
+                            <span>Laura Jewelry Co</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Loan Application Steps -->
+                <div class="loan-steps">
+                    <div class="step active">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Loan Type</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Loan Details</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Personal Info</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-label">Review & Submit</div>
+                    </div>
+                </div>
+                
+                <!-- Loan Type Selection -->
+                <section class="loan-type-section">
+                    <h2>Select Loan Type</h2>
+                    <div class="loan-types">
+                        <div class="loan-type-card">
+                            <div class="loan-icon">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <h3>Auto Loan</h3>
+                            <p>Finance your new or used vehicle with competitive rates</p>
+                            <div class="loan-details">
+                                <div class="detail-item">
+                                    <span>Rate as low as</span>
+                                    <span class="rate">3.99% APR*</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span>Terms up to</span>
+                                    <span class="term">84 months</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline select-loan-btn" data-loan-type="auto">Select</button>
+                        </div>
+                        <div class="loan-type-card">
+                            <div class="loan-icon">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <h3>Mortgage</h3>
+                            <p>Purchase or refinance your home with flexible options</p>
+                            <div class="loan-details">
+                                <div class="detail-item">
+                                    <span>Rate as low as</span>
+                                    <span class="rate">5.25% APR*</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span>Terms up to</span>
+                                    <span class="term">30 years</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline select-loan-btn" data-loan-type="mortgage">Select</button>
+                        </div>
+                        <div class="loan-type-card">
+                            <div class="loan-icon">
+                                <i class="fas fa-business-time"></i>
+                            </div>
+                            <h3>Business Loan</h3>
+                            <p>Grow your business with our financing solutions</p>
+                            <div class="loan-details">
+                                <div class="detail-item">
+                                    <span>Rate as low as</span>
+                                    <span class="rate">6.50% APR*</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span>Terms up to</span>
+                                    <span class="term">10 years</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline select-loan-btn" data-loan-type="business">Select</button>
+                        </div>
+                        <div class="loan-type-card">
+                            <div class="loan-icon">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                            </div>
+                            <h3>Personal Loan</h3>
+                            <p>For debt consolidation, home improvements, and more</p>
+                            <div class="loan-details">
+                                <div class="detail-item">
+                                    <span>Rate as low as</span>
+                                    <span class="rate">7.99% APR*</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span>Terms up to</span>
+                                    <span class="term">60 months</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline select-loan-btn" data-loan-type="personal">Select</button>
+                        </div>
+                    </div>
+                    <div class="disclaimer">
+                        <p>*Annual Percentage Rate. Rates shown are for qualified applicants and subject to change. Your actual rate may vary based on creditworthiness, loan term, and other factors.</p>
+                    </div>
+                </section>
+                
+                <!-- Loan Calculator -->
+                <section class="loan-calculator-section">
+                    <h2>Loan Calculator</h2>
+                    <div class="calculator-container">
+                        <div class="calculator-form">
+                            <div class="form-group">
+                                <label for="loanAmount">Loan Amount</label>
+                                <div class="input-with-symbol">
+                                    <span>$</span>
+                                    <input type="number" id="loanAmount" min="1000" step="100" value="25000">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="interestRate">Interest Rate</label>
+                                <div class="input-with-symbol">
+                                    <span>%</span>
+                                    <input type="number" id="interestRate" min="1" max="20" step="0.25" value="5.5">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="loanTerm">Loan Term</label>
+                                <div class="input-with-term">
+                                    <input type="number" id="loanTerm" min="1" max="30" value="5">
+                                    <select id="termUnit">
+                                        <option value="years">Years</option>
+                                        <option value="months">Months</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" id="calculateBtn">Calculate</button>
+                        </div>
+                        <div class="calculator-results">
+                            <div class="result-item">
+                                <span>Monthly Payment</span>
+                                <span id="monthlyPayment">$478.88</span>
+                            </div>
+                            <div class="result-item">
+                                <span>Total Interest</span>
+                                <span id="totalInterest">$3,732.80</span>
+                            </div>
+                            <div class="result-item">
+                                <span>Total Cost</span>
+                                <span id="totalCost">$28,732.80</span>
+                            </div>
+                            <div class="amortization-chart">
+                                <h3>Payment Breakdown</h3>
+                                <div class="chart-bars">
+                                    <div class="chart-bar principal" style="width: 87%;">
+                                        <span>Principal</span>
+                                    </div>
+                                    <div class="chart-bar interest" style="width: 13%;">
+                                        <span>Interest</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script>
+        // Loan type selection
+        document.querySelectorAll('.select-loan-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const loanType = this.getAttribute('data-loan-type');
+                alert(`You've selected ${loanType} loan. In a real application, this would proceed to the next step.`);
+            });
+        });
+        
+        // Loan calculator functionality
+        document.getElementById('calculateBtn').addEventListener('click', calculateLoan);
+        
+        function calculateLoan() {
+            const amount = parseFloat(document.getElementById('loanAmount').value);
+            const rate = parseFloat(document.getElementById('interestRate').value) / 100 / 12;
+            const termValue = parseInt(document.getElementById('loanTerm').value);
+            const termUnit = document.getElementById('termUnit').value;
+            
+            let payments;
+            if (termUnit === 'years') {
+                payments = termValue * 12;
+            } else {
+                payments = termValue;
+            }
+            
+            // Calculate monthly payment
+            const x = Math.pow(1 + rate, payments);
+            const monthly = (amount * x * rate) / (x - 1);
+            const monthlyPayment = isFinite(monthly) ? monthly : 0;
+            
+            // Calculate totals
+            const totalPayment = monthlyPayment * payments;
+            const totalInterest = totalPayment - amount;
+            
+            // Update UI
+            document.getElementById('monthlyPayment').textContent = '$' + monthlyPayment.toFixed(2);
+            document.getElementById('totalInterest').textContent = '$' + totalInterest.toFixed(2);
+            document.getElementById('totalCost').textContent = '$' + totalPayment.toFixed(2);
+            
+            // Update chart
+            const principalPercent = Math.round((amount / totalPayment) * 100);
+            const interestPercent = 100 - principalPercent;
+            
+            document.querySelector('.principal').style.width = principalPercent + '%';
+            document.querySelector('.interest').style.width = interestPercent + '%';
+        }
+        
+        // Initial calculation
+        calculateLoan();
+    </script>
+</body>
+</html>
