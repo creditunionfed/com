@@ -11,9 +11,96 @@
         .status-restricted {
             color: #ffd700; /* Gold yellow */
         }
+        
+        /* Auto-logout warning modal styles */
+        .logout-warning-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .logout-warning-content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logout-warning-content h3 {
+            color: #d32f2f;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .logout-warning-content p {
+            margin-bottom: 20px;
+            color: #666;
+        }
+        
+        .logout-countdown {
+            font-size: 2em;
+            font-weight: bold;
+            color: #d32f2f;
+            margin: 15px 0;
+        }
+        
+        .logout-warning-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .logout-warning-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .stay-logged-in {
+            background: #1976d2;
+            color: white;
+        }
+        
+        .logout-now {
+            background: #d32f2f;
+            color: white;
+        }
+        
+        .logout-warning-buttons button:hover {
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
+    <!-- Auto-logout warning modal -->
+    <div id="logoutWarningModal" class="logout-warning-modal">
+        <div class="logout-warning-content">
+            <h3><i class="fas fa-exclamation-triangle"></i> Session Timeout Warning</h3>
+            <p>Your session will expire due to inactivity.</p>
+            <p>You will be automatically logged out in:</p>
+            <div id="logoutCountdown" class="logout-countdown">30</div>
+            <div class="logout-warning-buttons">
+                <button id="stayLoggedIn" class="stay-logged-in">
+                    <i class="fas fa-clock"></i> Stay Logged In
+                </button>
+                <button id="logoutNow" class="logout-now">
+                    <i class="fas fa-sign-out-alt"></i> Logout Now
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Dashboard Navigation -->
     <div class="dashboard-layout">
         <!-- Sidebar -->
@@ -228,8 +315,118 @@
     <script src="../js/main.js"></script>
     <script src="../js/dashboard.js"></script>
     <script>
-        // For demo purposes, we'll add some interactive elements
+        // Auto-logout functionality
+        class AutoLogout {
+            constructor() {
+                this.timeout = 2 * 60 * 1000; // 2 minutes in milliseconds
+                this.warningTime = 30 * 1000; // Show warning 30 seconds before logout
+                this.lastActivity = Date.now();
+                this.timer = null;
+                this.warningTimer = null;
+                this.countdownTimer = null;
+                this.isWarningShown = false;
+                
+                this.init();
+            }
+            
+            init() {
+                // Events that count as user activity
+                const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
+                
+                events.forEach(event => {
+                    document.addEventListener(event, () => this.resetTimer(), true);
+                });
+                
+                // Initialize modal elements
+                this.modal = document.getElementById('logoutWarningModal');
+                this.countdownElement = document.getElementById('logoutCountdown');
+                this.stayLoggedInBtn = document.getElementById('stayLoggedIn');
+                this.logoutNowBtn = document.getElementById('logoutNow');
+                
+                // Bind event listeners
+                this.stayLoggedInBtn.addEventListener('click', () => this.stayLoggedIn());
+                this.logoutNowBtn.addEventListener('click', () => this.logout());
+                
+                // Start the timer
+                this.resetTimer();
+            }
+            
+            resetTimer() {
+                this.lastActivity = Date.now();
+                this.clearTimers();
+                this.hideWarning();
+                
+                // Set timer for warning (1.5 minutes)
+                this.timer = setTimeout(() => this.showWarning(), this.timeout - this.warningTime);
+            }
+            
+            clearTimers() {
+                if (this.timer) {
+                    clearTimeout(this.timer);
+                    this.timer = null;
+                }
+                if (this.warningTimer) {
+                    clearTimeout(this.warningTimer);
+                    this.warningTimer = null;
+                }
+                if (this.countdownTimer) {
+                    clearInterval(this.countdownTimer);
+                    this.countdownTimer = null;
+                }
+            }
+            
+            showWarning() {
+                if (this.isWarningShown) return;
+                
+                this.isWarningShown = true;
+                this.modal.style.display = 'flex';
+                
+                let secondsLeft = 30;
+                this.countdownElement.textContent = secondsLeft;
+                
+                // Update countdown every second
+                this.countdownTimer = setInterval(() => {
+                    secondsLeft--;
+                    this.countdownElement.textContent = secondsLeft;
+                    
+                    if (secondsLeft <= 0) {
+                        this.logout();
+                    }
+                }, 1000);
+                
+                // Auto-logout after warning period
+                this.warningTimer = setTimeout(() => this.logout(), this.warningTime);
+            }
+            
+            hideWarning() {
+                if (!this.isWarningShown) return;
+                
+                this.isWarningShown = false;
+                this.modal.style.display = 'none';
+                this.clearTimers();
+            }
+            
+            stayLoggedIn() {
+                this.resetTimer();
+            }
+            
+            logout() {
+                // Clear all timers
+                this.clearTimers();
+                
+                // Show logout message
+                alert('Session expired due to inactivity. You will be redirected to the login page.');
+                
+                // Redirect to main page
+                window.location.href = '../index.html';
+            }
+        }
+        
+        // Original dashboard functionality
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize auto-logout
+            new AutoLogout();
+            
             // Toggle sidebar on mobile
             const sidebarToggle = document.querySelector('.sidebar-toggle');
             const sidebar = document.querySelector('.sidebar');
