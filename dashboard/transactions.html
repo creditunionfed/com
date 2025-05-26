@@ -7,8 +7,352 @@
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Enhanced professional styling for transaction history */
+        .transaction-filters {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 20px;
+            align-items: end;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+            transition: all 0.2s ease;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .transaction-list-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            padding: 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
+            color: white;
+        }
+
+        .section-header h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .export-options .btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            transition: all 0.2s ease;
+        }
+
+        .export-options .btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .transaction-table thead {
+            background: #f8fafc;
+        }
+
+        .transaction-table th {
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .transaction-table tbody tr {
+            border-bottom: 1px solid #f3f4f6;
+            transition: all 0.2s ease;
+        }
+
+        .transaction-table tbody tr:hover {
+            background: #f8fafc;
+            transform: translateX(2px);
+        }
+
+        .transaction-table td {
+            padding: 20px;
+            vertical-align: middle;
+        }
+
+        .transaction-description {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .transaction-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .transaction-description h3 {
+            margin: 0 0 4px 0;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .transaction-description p {
+            margin: 0;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .amount {
+            font-weight: 700;
+            font-size: 16px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .text-success {
+            color: #059669 !important;
+        }
+
+        .text-danger {
+            color: #dc2626 !important;
+        }
+
+        .status-completed {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            padding: 24px;
+            background: #f8fafc;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .page-info {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-outline {
+            background: white;
+            border: 1px solid #d1d5db;
+            color: #374151;
+        }
+
+        .btn-outline:hover:not(:disabled) {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Session timeout modal */
+        .timeout-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .timeout-modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timeout-content {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        .timeout-icon {
+            font-size: 48px;
+            color: #f59e0b;
+            margin-bottom: 16px;
+        }
+
+        .timeout-content h3 {
+            margin: 0 0 16px 0;
+            color: #1f2937;
+            font-size: 20px;
+        }
+
+        .timeout-content p {
+            margin: 0 0 24px 0;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .countdown {
+            font-size: 24px;
+            font-weight: 700;
+            color: #dc2626;
+            margin: 16px 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .filter-row {
+                flex-direction: column;
+            }
+            
+            .filter-group {
+                min-width: 100%;
+            }
+
+            .transaction-table {
+                font-size: 12px;
+            }
+
+            .transaction-table th,
+            .transaction-table td {
+                padding: 12px 8px;
+            }
+
+            .transaction-description {
+                gap: 12px;
+            }
+
+            .transaction-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Session Timeout Modal -->
+    <div class="timeout-modal" id="timeoutModal">
+        <div class="timeout-content">
+            <div class="timeout-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+            <h3>Session Timeout Warning</h3>
+            <p>Your session will expire due to inactivity. You will be logged out in:</p>
+            <div class="countdown" id="countdown">30</div>
+            <div style="display: flex; gap: 12px; justify-content: center;">
+                <button class="btn btn-primary" onclick="extendSession()">Stay Logged In</button>
+                <button class="btn btn-outline" onclick="logoutNow()">Logout Now</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Dashboard Navigation -->
     <div class="dashboard-layout">
         <!-- Sidebar -->
@@ -124,7 +468,10 @@
                                 <option value="custom">Custom Range</option>
                             </select>
                         </div>
-                        <button class="btn btn-primary">Apply Filters</button>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-filter"></i>
+                            Apply Filters
+                        </button>
                     </div>
                     <div class="filter-row" id="customDateRange" style="display: none;">
                         <div class="filter-group">
@@ -141,7 +488,7 @@
                 <!-- Transaction List -->
                 <section class="transaction-list-section">
                     <div class="section-header">
-                        <h2>All Transactions</h2>
+                        <h2>Recent Transactions</h2>
                         <div class="export-options">
                             <button class="btn btn-outline">
                                 <i class="fas fa-download"></i>
@@ -302,6 +649,86 @@
     <script src="../js/main.js"></script>
     <script src="../js/dashboard.js"></script>
     <script>
+        // Session timeout management
+        let sessionTimer;
+        let warningTimer;
+        let countdownTimer;
+        let countdownValue = 30;
+        const INACTIVITY_TIME = 2 * 60 * 1000; // 2 minutes in milliseconds
+        const WARNING_TIME = 30 * 1000; // 30 seconds warning
+
+        function resetSessionTimer() {
+            clearTimeout(sessionTimer);
+            clearTimeout(warningTimer);
+            clearInterval(countdownTimer);
+            hideTimeoutModal();
+            
+            sessionTimer = setTimeout(() => {
+                showTimeoutWarning();
+            }, INACTIVITY_TIME - WARNING_TIME);
+        }
+
+        function showTimeoutWarning() {
+            const modal = document.getElementById('timeoutModal');
+            const countdown = document.getElementById('countdown');
+            
+            modal.classList.add('show');
+            countdownValue = 30;
+            countdown.textContent = countdownValue;
+            
+            countdownTimer = setInterval(() => {
+                countdownValue--;
+                countdown.textContent = countdownValue;
+                
+                if (countdownValue <= 0) {
+                    logoutUser();
+                }
+            }, 1000);
+            
+            warningTimer = setTimeout(() => {
+                logoutUser();
+            }, WARNING_TIME);
+        }
+
+        function hideTimeoutModal() {
+            const modal = document.getElementById('timeoutModal');
+            modal.classList.remove('show');
+        }
+
+        function extendSession() {
+            clearTimeout(warningTimer);
+            clearInterval(countdownTimer);
+            hideTimeoutModal();
+            resetSessionTimer();
+        }
+
+        function logoutNow() {
+            logoutUser();
+        }
+
+        function logoutUser() {
+            // Clear all timers
+            clearTimeout(sessionTimer);
+            clearTimeout(warningTimer);
+            clearInterval(countdownTimer);
+            
+            // Show logout message
+            alert('Session expired due to inactivity. You will be redirected to the login page.');
+            
+            // Redirect to main index page
+            window.location.href = '../index.html';
+        }
+
+        // Track user activity
+        const activityEvents = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
+        
+        activityEvents.forEach(event => {
+            document.addEventListener(event, resetSessionTimer, { passive: true });
+        });
+
+        // Initialize session timer when page loads
+        resetSessionTimer();
+
         // Show/hide custom date range
         document.getElementById('date').addEventListener('change', function() {
             const customDateRange = document.getElementById('customDateRange');
@@ -329,6 +756,17 @@
             } else {
                 cell.classList.add('text-success');
             }
+        });
+
+        // Enhanced table interactions
+        document.querySelectorAll('.transaction-table tbody tr').forEach(row => {
+            row.addEventListener('click', function() {
+                // Add a subtle click effect
+                this.style.background = '#e0f2fe';
+                setTimeout(() => {
+                    this.style.background = '';
+                }, 200);
+            });
         });
     </script>
 </body>
