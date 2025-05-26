@@ -29,16 +29,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Sample data for charts (would be replaced with real data in production)
     const sampleTransactions = [
-        { id: 1, date: '2023-10-15', description: 'Deposit from Real Estate Pro', amount: 400000.00, type: 'credit' },
-        { id: 2, date: '2023-10-10', description: 'Withdrawal to Diamond Wholesale', amount: 85300.00, type: 'debit' },
-        { id: 3, date: '2023-10-05', description: 'Withdrawal to Packaging Solutions', amount: 12450.00, type: 'debit' },
-        { id: 4, date: '2023-09-28', description: 'Withdrawal to Shipping Express', amount: 8750.00, type: 'debit' },
-        { id: 5, date: '2023-09-20', description: 'Deposit from Jewelry Sales', amount: 28500.00, type: 'credit' }
+        { id: 1, date: '2023-10-15', description: 'Deposit from Real Estate Pro', amount: 4000000.00, type: 'credit' },
+        { id: 2, date: '2023-10-10', description: 'Withdrawal to Diamond Wholesale', amount: 853000.00, type: 'debit' },
+        { id: 3, date: '2023-10-05', description: 'Withdrawal to Packaging Solutions', amount: 124500.00, type: 'debit' },
+        { id: 4, date: '2023-09-28', description: 'Withdrawal to Shipping Express', amount: 87500.00, type: 'debit' },
+        { id: 5, date: '2023-09-20', description: 'Deposit from Jewelry Sales', amount: 285000.00, type: 'credit' }
     ];
     
     // Calculate current balance based on sample transactions
     function calculateBalance() {
-        let balance = 365700.00; // Starting balance
+        let balance = 3657000.00; // Starting balance
         
         sampleTransactions.forEach(transaction => {
             if (transaction.type === 'credit') {
