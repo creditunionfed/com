@@ -7,14 +7,94 @@
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .tax-alert-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .tax-alert-modal {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .tax-alert-icon {
+            color: #e74c3c;
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .tax-alert-title {
+            color: #e74c3c;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .tax-alert-message {
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        
+        .tax-alert-button {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .tax-alert-button:hover {
+            background: #c0392b;
+        }
+        
+        .bank-name-display {
+            margin-top: 5px;
+            font-size: 14px;
+            color: #666;
+            font-style: italic;
+        }
+    </style>
 </head>
 <body>
+    <!-- Tax Alert Modal -->
+    <div class="tax-alert-overlay" id="taxAlertOverlay">
+        <div class="tax-alert-modal">
+            <div class="tax-alert-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="tax-alert-title">Transfer Restricted</div>
+            <div class="tax-alert-message">
+                Tax and Reporting Obligations Not Settled<br>
+                Please contact customer service to resolve this matter before proceeding with transfers.
+            </div>
+            <button class="tax-alert-button" onclick="closeTaxAlert()">Understood</button>
+        </div>
+    </div>
+
     <!-- Dashboard Navigation -->
     <div class="dashboard-layout">
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <img src="../images/logo-white.png" alt="Community Credit Union" class="sidebar-logo">
+                <img src="https://via.placeholder.com/150x50/2c3e50/ffffff?text=Community+Credit+Union" alt="Community Credit Union" class="sidebar-logo">
             </div>
             <div class="user-profile">
                 <div class="user-avatar">
@@ -182,6 +262,7 @@
                                 <div class="form-group">
                                     <label for="recipientRouting">Routing Number</label>
                                     <input type="text" id="recipientRouting" placeholder="Enter routing number">
+                                    <div class="bank-name-display" id="bankNameDisplay"></div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -258,6 +339,40 @@
     <script src="../js/main.js"></script>
     <script src="../js/dashboard.js"></script>
     <script>
+        // Routing number to bank name mapping
+        const routingToBankMap = {
+            '021000021': 'JPMorgan Chase Bank',
+            '026009593': 'Bank of America',
+            '111000025': 'Wells Fargo Bank',
+            '021200025': 'Citibank',
+            '063100277': 'U.S. Bank',
+            '053000219': 'PNC Bank',
+            '044000804': 'Truist Bank',
+            '071000013': 'TD Bank',
+            '081000032': 'Capital One',
+            '124003116': 'Regions Bank',
+            '267084131': 'HSBC Bank USA',
+            '122000247': 'American Express Bank',
+            '075000019': 'Huntington National Bank',
+            '124085244': 'Fifth Third Bank',
+            '103000648': 'KeyBank',
+            '041000124': 'SunTrust Bank',
+            '031302955': 'M&T Bank',
+            '222371863': 'Santander Bank',
+            '051404260': 'BBVA USA',
+            '314074269': 'Navy Federal Credit Union'
+        };
+
+        // Function to show tax alert
+        function showTaxAlert() {
+            document.getElementById('taxAlertOverlay').style.display = 'flex';
+        }
+
+        // Function to close tax alert
+        function closeTaxAlert() {
+            document.getElementById('taxAlertOverlay').style.display = 'none';
+        }
+
         // Transfer tabs functionality
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', function() {
@@ -293,32 +408,38 @@
                 newRecipientFields.style.display = 'none';
             }
         });
+
+        // Bank name generation from routing number
+        document.getElementById('recipientRouting').addEventListener('input', function() {
+            const routingNumber = this.value.replace(/\D/g, ''); // Remove non-digits
+            const bankDisplay = document.getElementById('bankNameDisplay');
+            
+            if (routingNumber.length === 9) {
+                const bankName = routingToBankMap[routingNumber];
+                if (bankName) {
+                    bankDisplay.textContent = `Bank: ${bankName}`;
+                    bankDisplay.style.color = '#28a745';
+                } else {
+                    bankDisplay.textContent = 'Bank: Unknown routing number';
+                    bankDisplay.style.color = '#dc3545';
+                }
+            } else if (routingNumber.length > 0) {
+                bankDisplay.textContent = 'Enter 9-digit routing number';
+                bankDisplay.style.color = '#6c757d';
+            } else {
+                bankDisplay.textContent = '';
+            }
+        });
         
-        // Form submission
+        // Form submission with tax alert
         document.getElementById('internalTransferForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            // Get form values
-            const fromAccount = this.elements.fromAccount.value;
-            const toAccount = this.elements.toAccount.value;
-            const amount = parseFloat(this.elements.amount.value);
-            const transferDate = this.elements.date.value;
-            const futureDate = transferDate === 'future' ? this.elements.futureDate.value : null;
-            const memo = this.elements.memo.value;
-            
-            // Here you would typically send this data to your backend
-            console.log('Transfer request:', {
-                fromAccount,
-                toAccount,
-                amount,
-                transferDate,
-                futureDate,
-                memo
-            });
-            
-            // For demo purposes, we'll show a success message
-            alert(`Transfer of $${amount.toFixed(2)} scheduled successfully!`);
-            this.reset();
+            showTaxAlert();
+        });
+
+        document.getElementById('externalTransferForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showTaxAlert();
         });
         
         // Format transfer amounts
@@ -328,6 +449,13 @@
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
             });
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('taxAlertOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeTaxAlert();
+            }
         });
     </script>
 </body>
