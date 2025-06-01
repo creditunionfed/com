@@ -4,72 +4,126 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transfer Funds | Tevex Community Credit Union</title>
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #1e40af;
+            --primary-light: #3b82f6;
+            --primary-dark: #1e3a8a;
+            --secondary-color: #0f172a;
+            --accent-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --success-color: #10b981;
+            --background-main: #f8fafc;
+            --background-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-light: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            --gradient-card: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-success: linear-gradient(135deg, var(--success-color) 0%, #34d399 100%);
+            --gradient-warning: linear-gradient(135deg, var(--warning-color) 0%, #fbbf24 100%);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Tax Alert Modal */
         .tax-alert-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
             display: none;
             z-index: 9999;
             justify-content: center;
             align-items: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         
         .tax-alert-modal {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            background: var(--background-card);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-xl);
             text-align: center;
-            max-width: 400px;
+            max-width: 450px;
             width: 90%;
+            border: 1px solid var(--border-light);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         
         .tax-alert-icon {
-            color: #e74c3c;
-            font-size: 48px;
-            margin-bottom: 20px;
+            color: var(--danger-color);
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            background: rgba(239, 68, 68, 0.1);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
         }
         
         .tax-alert-title {
-            color: #e74c3c;
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 15px;
+            color: var(--danger-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
         }
         
         .tax-alert-message {
-            color: #333;
-            margin-bottom: 25px;
-            line-height: 1.5;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.6;
         }
         
         .tax-alert-button {
-            background: #e74c3c;
+            background: var(--gradient-primary);
             color: white;
             border: none;
-            padding: 12px 30px;
-            border-radius: 5px;
+            padding: 0.75rem 2rem;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
         }
         
         .tax-alert-button:hover {
-            background: #c0392b;
-        }
-        
-        .bank-name-display {
-            margin-top: 5px;
-            font-size: 14px;
-            color: #666;
-            font-style: italic;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         /* Auto-logout warning modal styles */
@@ -80,65 +134,668 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
             z-index: 10000;
             justify-content: center;
             align-items: center;
+            animation: fadeIn 0.3s ease-out;
         }
         
         .logout-warning-content {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
+            background: var(--background-card);
+            padding: 2rem;
+            border-radius: 16px;
             text-align: center;
             max-width: 400px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-light);
+            animation: slideUp 0.3s ease-out;
         }
         
         .logout-warning-content h3 {
-            color: #d32f2f;
-            margin-bottom: 15px;
-            font-size: 1.2em;
+            color: var(--danger-color);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            font-weight: 600;
         }
         
         .logout-warning-content p {
-            margin-bottom: 20px;
-            color: #666;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
         }
         
         .logout-countdown {
-            font-size: 2em;
-            font-weight: bold;
-            color: #d32f2f;
-            margin: 15px 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--danger-color);
+            margin: 1.5rem 0;
+            text-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
         }
         
         .logout-warning-buttons {
             display: flex;
-            gap: 10px;
+            gap: 0.75rem;
             justify-content: center;
         }
         
         .logout-warning-buttons button {
-            padding: 10px 20px;
+            padding: 0.75rem 1.5rem;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
         
         .stay-logged-in {
-            background: #1976d2;
+            background: var(--gradient-primary);
             color: white;
         }
         
         .logout-now {
-            background: #d32f2f;
+            background: var(--danger-color);
             color: white;
         }
         
         .logout-warning-buttons button:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Dashboard Layout */
+        .dashboard-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar - matching dashboard */
+        .sidebar {
+            width: 280px;
+            background: var(--background-card);
+            border-right: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-lg);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+            background: var(--gradient-primary);
+        }
+
+        .sidebar-logo {
+            height: 40px;
+            width: auto;
+            filter: brightness(0) invert(1);
+        }
+
+        .user-profile {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .user-info h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .user-info p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1rem 0;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin: 0.25rem 1rem;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .sidebar-nav a:hover {
+            background: var(--background-main);
+            color: var(--primary-color);
+            transform: translateX(4px);
+        }
+
+        .sidebar-nav li.active a {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .sidebar-nav i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 1rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--danger-color);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.1);
+            transform: translateX(4px);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            min-height: 100vh;
+            background: var(--background-main);
+        }
+
+        /* Header */
+        .dashboard-header {
+            background: var(--background-card);
+            border-bottom: 1px solid var(--border-light);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .sidebar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-toggle:hover {
+            background: var(--background-main);
+            color: var(--primary-color);
+        }
+
+        .dashboard-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notification-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .notification-btn:hover {
+            background: var(--background-main);
+            color: var(--primary-color);
+        }
+
+        .badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--danger-color);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.125rem 0.375rem;
+            border-radius: 50px;
+            min-width: 1.25rem;
+            text-align: center;
+        }
+
+        .user-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: none;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .user-btn:hover {
+            background: var(--background-main);
+            color: var(--primary-color);
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Transfer Form Section */
+        .transfer-form-section {
+            background: var(--background-card);
+            border-radius: 20px;
+            box-shadow: var(--shadow-xl);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-light);
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .transfer-tabs {
+            display: flex;
+            background: var(--background-main);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1.25rem 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary-color);
+            background: var(--background-card);
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            background: var(--background-card);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .tab-btn.active::before {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 2rem;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeInUp 0.4s ease-out;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            animation: slideInFromLeft 0.4s ease-out;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .form-group select,
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="date"] {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            color: var(--text-primary);
+            background: var(--background-card);
+            transition: all 0.2s ease;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .input-with-symbol {
+            position: relative;
+        }
+
+        .input-with-symbol span {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-weight: 600;
+            z-index: 1;
+        }
+
+        .input-with-symbol input {
+            padding-left: 2.5rem;
+        }
+
+        .available-balance {
+            color: var(--success-color);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .bank-name-display {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            padding: 0.5rem;
+            border-radius: 8px;
+            background: var(--background-main);
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-color) 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-box i {
+            font-size: 1.5rem;
             opacity: 0.9;
+        }
+
+        .info-box p {
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            text-align: center;
+            border: 2px solid transparent;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-secondary);
+            border-color: var(--border-light);
+        }
+
+        .btn-outline:hover {
+            background: var(--background-main);
+            color: var(--text-primary);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Recent Transfers */
+        .recent-transfers {
+            background: var(--background-card);
+            border-radius: 20px;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-light);
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out 0.1s both;
+        }
+
+        .recent-transfers h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-light);
+            background: var(--background-main);
+        }
+
+        .transfers-list {
+            padding: 1rem 0;
+        }
+
+        .transfer-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2rem;
+            transition: all 0.2s ease;
+            border-left: 4px solid transparent;
+            animation: slideInFromLeft 0.4s ease-out;
+        }
+
+        .transfer-item:hover {
+            background: var(--background-main);
+            border-left-color: var(--primary-color);
+            transform: translateX(4px);
+        }
+
+        .transfer-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: white;
+        }
+
+        .transfer-details {
+            flex: 1;
+        }
+
+        .transfer-details h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .transfer-details p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .transfer-amount {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--success-color);
+            font-family: 'Courier New', monospace;
+        }
+
+        .view-all-transfers {
+            display: block;
+            text-align: center;
+            padding: 1rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            border-top: 1px solid var(--border-light);
+            transition: all 0.2s ease;
+        }
+
+        .view-all-transfers:hover {
+            background: var(--background-main);
+            color: var(--primary-dark);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .sidebar-toggle {
+                display: block;
+            }
+
+            .dashboard-content {
+                padding: 1rem;
+            }
+
+            .transfer-tabs {
+                flex-direction: column;
+            }
+
+            .tab-content {
+                padding: 1.5rem;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .transfer-item {
+                padding: 1rem;
+            }
+
+            .recent-transfers h2 {
+                padding: 1rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes slideInFromLeft {
+            from {
+                transform: translateX(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
     </style>
 </head>
@@ -292,473 +949,325 @@
                                 <label for="amount">Amount</label>
                                 <div class="input-with-symbol">
                                     <span>$</span>
-                                    <input type="number" id="amount" min="0.01" step="0.01" placeholder="0.00" required>
+                                    <input type="number" id="amount" step="0.01" min="0.01" placeholder="0.00" required>
                                 </div>
-                                <small class="available-balance">Available: $7,657,000.00</small>
-                            </div>
-                            <div class="form-group">
-                                <label for="date">Transfer Date</label>
-                                <select id="date">
-                                    <option value="now">Transfer Now</option>
-                                    <option value="future">Schedule for Later</option>
-                                </select>
-                            </div>
-                            <div class="form-group" id="futureDateField" style="display: none;">
-                                <label for="futureDate">Future Date</label>
-                                <input type="date" id="futureDate">
+                                <div class="available-balance">Available Balance: <span id="availableBalance">$7,657,000.00</span></div>
                             </div>
                             <div class="form-group">
                                 <label for="memo">Memo (Optional)</label>
-                                <input type="text" id="memo" placeholder="Enter memo">
+                                <input type="text" id="memo" placeholder="Transfer description">
+                            </div>
+                            <div class="form-group">
+                                <label for="transferDate">Transfer Date</label>
+                                <input type="date" id="transferDate" required>
                             </div>
                             <div class="form-actions">
                                 <button type="button" class="btn btn-outline">Cancel</button>
-                                <button type="submit" class="btn btn-primary">Continue</button>
+                                <button type="submit" class="btn btn-primary">Review Transfer</button>
                             </div>
                         </form>
                     </div>
-                    
+
                     <div class="tab-content" id="external-tab">
+                        <div class="info-box">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Transfers to other credit union members are typically processed instantly during business hours.</p>
+                        </div>
                         <form id="externalTransferForm">
                             <div class="form-group">
-                                <label for="extFromAccount">From Account</label>
-                                <select id="extFromAccount" required>
+                                <label for="fromAccountExternal">From Account</label>
+                                <select id="fromAccountExternal" required>
                                     <option value="" disabled selected>Select account</option>
                                     <option value="checking">Primary Checking (••••5678) - $7,657,000.00</option>
                                     <option value="savings">Business Savings (••••9012) - $125,000.00</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="recipient">Recipient</label>
-                                <select id="recipient" required>
-                                    <option value="" disabled selected>Select recipient</option>
-                                    <option value="john">Laura Bennett (••••7214)</option>
-                                    <option value="mary">Mary Johnson (••••5678)</option>
-                                    <option value="new">Add New Recipient</option>
-                                </select>
-                            </div>
-                            <div id="newRecipientFields" style="display: none;">
-                                <div class="form-group">
-                                    <label for="recipientName">Recipient Name</label>
-                                    <input type="text" id="recipientName" placeholder="Enter recipient's full name">
-                                </div>
-                                <div class="form-group">
-                                    <label for="recipientAccount">Account Number</label>
-                                    <input type="text" id="recipientAccount" placeholder="Enter account number">
-                                </div>
-                                <div class="form-group">
-                                    <label for="recipientRouting">Routing Number</label>
-                                    <input type="text" id="recipientRouting" placeholder="Enter routing number">
-                                    <div class="bank-name-display" id="bankNameDisplay"></div>
-                                </div>
+                                <label for="recipientAccount">Recipient Account Number</label>
+                                <input type="text" id="recipientAccount" placeholder="Enter account number" required>
                             </div>
                             <div class="form-group">
-                                <label for="extAmount">Amount</label>
+                                <label for="recipientName">Recipient Name</label>
+                                <input type="text" id="recipientName" placeholder="Enter recipient name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="amountExternal">Amount</label>
                                 <div class="input-with-symbol">
                                     <span>$</span>
-                                    <input type="number" id="extAmount" min="0.01" step="0.01" placeholder="0.00" required>
+                                    <input type="number" id="amountExternal" step="0.01" min="0.01" placeholder="0.00" required>
                                 </div>
-                                <small class="available-balance">Available: $7,657,000.00</small>
+                                <div class="available-balance">Available Balance: <span id="availableBalanceExternal">$7,657,000.00</span></div>
                             </div>
                             <div class="form-group">
-                                <label for="extMemo">Memo (Optional)</label>
-                                <input type="text" id="extMemo" placeholder="Enter memo">
+                                <label for="memoExternal">Memo (Optional)</label>
+                                <input type="text" id="memoExternal" placeholder="Transfer description">
                             </div>
                             <div class="form-actions">
                                 <button type="button" class="btn btn-outline">Cancel</button>
-                                <button type="submit" class="btn btn-primary">Continue</button>
+                                <button type="submit" class="btn btn-primary">Review Transfer</button>
                             </div>
                         </form>
                     </div>
-                    
+
                     <div class="tab-content" id="external-bank-tab">
                         <div class="info-box">
-                            <i class="fas fa-info-circle"></i>
-                            <p>To transfer funds to an external bank account, please visit our Bill Pay service or contact member services for assistance.</p>
+                            <i class="fas fa-clock"></i>
+                            <p>External bank transfers may take 1-3 business days to process. Additional fees may apply.</p>
                         </div>
-                        <div class="form-actions">
-                            <a href="#" class="btn btn-primary">Go to Bill Pay</a>
-                        </div>
+                        <form id="externalBankTransferForm">
+                            <div class="form-group">
+                                <label for="fromAccountBank">From Account</label>
+                                <select id="fromAccountBank" required>
+                                    <option value="" disabled selected>Select account</option>
+                                    <option value="checking">Primary Checking (••••5678) - $7,657,000.00</option>
+                                    <option value="savings">Business Savings (••••9012) - $125,000.00</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="bankRoutingNumber">Bank Routing Number</label>
+                                <input type="text" id="bankRoutingNumber" placeholder="9-digit routing number" maxlength="9" required>
+                                <div class="bank-name-display" id="bankNameDisplay"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="bankAccountNumber">Bank Account Number</label>
+                                <input type="text" id="bankAccountNumber" placeholder="Enter account number" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="bankAccountType">Account Type</label>
+                                <select id="bankAccountType" required>
+                                    <option value="" disabled selected>Select account type</option>
+                                    <option value="checking">Checking</option>
+                                    <option value="savings">Savings</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="recipientNameBank">Recipient Name</label>
+                                <input type="text" id="recipientNameBank" placeholder="Name on bank account" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="amountBank">Amount</label>
+                                <div class="input-with-symbol">
+                                    <span>$</span>
+                                    <input type="number" id="amountBank" step="0.01" min="0.01" placeholder="0.00" required>
+                                </div>
+                                <div class="available-balance">Available Balance: <span id="availableBalanceBank">$7,657,000.00</span></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="memoBank">Memo (Optional)</label>
+                                <input type="text" id="memoBank" placeholder="Transfer description">
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-outline">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Review Transfer</button>
+                            </div>
+                        </form>
                     </div>
                 </section>
-                
+
                 <!-- Recent Transfers -->
                 <section class="recent-transfers">
                     <h2>Recent Transfers</h2>
                     <div class="transfers-list">
                         <div class="transfer-item">
                             <div class="transfer-icon">
-                                <i class="fas fa-exchange-alt"></i>
+                                <i class="fas fa-arrow-right"></i>
                             </div>
                             <div class="transfer-details">
-                                <h3>Internal Transfer</h3>
-                                <p>From Checking to Savings • Oct 5, 2023</p>
+                                <h3>To Business Savings</h3>
+                                <p>December 28, 2024 • Internal Transfer</p>
                             </div>
-                            <div class="transfer-amount">$5,000.00</div>
+                            <div class="transfer-amount">$50,000.00</div>
                         </div>
                         <div class="transfer-item">
-                            <div class="transfer-icon">
+                            <div class="transfer-icon" style="background: var(--gradient-warning);">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <div class="transfer-details">
+                                <h3>To Wells Fargo Business Account</h3>
+                                <p>December 26, 2024 • External Transfer</p>
+                            </div>
+                            <div class="transfer-amount">$25,000.00</div>
+                        </div>
+                        <div class="transfer-item">
+                            <div class="transfer-icon" style="background: var(--gradient-success);">
                                 <i class="fas fa-user"></i>
                             </div>
                             <div class="transfer-details">
-                                <h3>To John Smith</h3>
-                                <p>From Checking • Sep 28, 2023</p>
+                                <h3>To Sarah Johnson</h3>
+                                <p>December 24, 2024 • Member Transfer</p>
                             </div>
-                            <div class="transfer-amount">$2,500.00</div>
+                            <div class="transfer-amount">$1,200.00</div>
                         </div>
                         <div class="transfer-item">
                             <div class="transfer-icon">
-                                <i class="fas fa-exchange-alt"></i>
+                                <i class="fas fa-arrow-left"></i>
                             </div>
                             <div class="transfer-details">
-                                <h3>Internal Transfer</h3>
-                                <p>From Savings to Checking • Sep 15, 2023</p>
+                                <h3>From Primary Checking</h3>
+                                <p>December 22, 2024 • Internal Transfer</p>
                             </div>
-                            <div class="transfer-amount">$10,000.00</div>
+                            <div class="transfer-amount">$75,000.00</div>
                         </div>
                     </div>
-                    <a href="transactions.html" class="view-all-transfers">View All Transfers</a>
+                    <a href="transactions.html" class="view-all-transfers">
+                        View All Transfers <i class="fas fa-arrow-right"></i>
+                    </a>
                 </section>
             </div>
         </main>
     </div>
 
-    <script src="../js/main.js"></script>
-    <script src="../js/dashboard.js"></script>
     <script>
-        // Auto-logout functionality
-        class AutoLogout {
-            constructor() {
-                this.timeout = 2 * 60 * 1000; // 2 minutes in milliseconds
-                this.warningTime = 30 * 1000; // Show warning 30 seconds before logout
-                this.lastActivity = Date.now();
-                this.timer = null;
-                this.warningTimer = null;
-                this.countdownTimer = null;
-                this.isWarningShown = false;
+        // Set default date to today
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('transferDate').value = today;
+        });
+
+        // Tab switching functionality
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
                 
-                this.init();
-            }
+                // Remove active class from all tabs and content
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                this.classList.add('active');
+                document.getElementById(tabId + '-tab').classList.add('active');
+            });
+        });
+
+        // Sidebar toggle for mobile
+        document.querySelector('.sidebar-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+
+        // Bank routing number lookup (mock functionality)
+        const bankDatabase = {
+            '121000248': 'Wells Fargo Bank',
+            '011401533': 'PNC Bank',
+            '063100277': 'JP Morgan Chase Bank',
+            '021000021': 'JPMorgan Chase Bank',
+            '026009593': 'Bank of America',
+            '121042882': 'Wells Fargo Bank',
+            '011075150': 'Regions Bank'
+        };
+
+        document.getElementById('bankRoutingNumber').addEventListener('input', function() {
+            const routingNumber = this.value;
+            const bankDisplay = document.getElementById('bankNameDisplay');
             
-            init() {
-                // Events that count as user activity
-                const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
-                
-                events.forEach(event => {
-                    document.addEventListener(event, () => this.resetTimer(), true);
-                });
-                
-                // Initialize modal elements
-                this.modal = document.getElementById('logoutWarningModal');
-                this.countdownElement = document.getElementById('logoutCountdown');
-                this.stayLoggedInBtn = document.getElementById('stayLoggedIn');
-                this.logoutNowBtn = document.getElementById('logoutNow');
-                
-                // Bind event listeners
-                this.stayLoggedInBtn.addEventListener('click', () => this.stayLoggedIn());
-                this.logoutNowBtn.addEventListener('click', () => this.logout());
-                
-                // Start the timer
-                this.resetTimer();
+            if (routingNumber.length === 9 && bankDatabase[routingNumber]) {
+                bankDisplay.textContent = `Bank: ${bankDatabase[routingNumber]}`;
+                bankDisplay.style.display = 'block';
+            } else {
+                bankDisplay.style.display = 'none';
             }
-            
-            resetTimer() {
-                this.lastActivity = Date.now();
-                this.clearTimers();
-                this.hideWarning();
-                
-                // Set timer for warning (1.5 minutes)
-                this.timer = setTimeout(() => this.showWarning(), this.timeout - this.warningTime);
-            }
-            
-            clearTimers() {
-                if (this.timer) {
-                    clearTimeout(this.timer);
-                    this.timer = null;
-                }
-                if (this.warningTimer) {
-                    clearTimeout(this.warningTimer);
-                    this.warningTimer = null;
-                }
-                if (this.countdownTimer) {
-                    clearInterval(this.countdownTimer);
-                    this.countdownTimer = null;
-                }
-            }
-            
-            showWarning() {
-                if (this.isWarningShown) return;
-                
-                this.isWarningShown = true;
-                this.modal.style.display = 'flex';
-                
-                let secondsLeft = 30;
-                this.countdownElement.textContent = secondsLeft;
-                
-                // Update countdown every second
-                this.countdownTimer = setInterval(() => {
-                    secondsLeft--;
-                    this.countdownElement.textContent = secondsLeft;
-                    
-                    if (secondsLeft <= 0) {
-                        this.logout();
-                    }
-                }, 1000);
-                
-                // Auto-logout after warning period
-                this.warningTimer = setTimeout(() => this.logout(), this.warningTime);
-            }
-            
-            hideWarning() {
-                if (!this.isWarningShown) return;
-                
-                this.isWarningShown = false;
-                this.modal.style.display = 'none';
-                this.clearTimers();
-            }
-            
-            stayLoggedIn() {
-                this.resetTimer();
-            }
-            
-            logout() {
-                // Clear all timers
-                this.clearTimers();
-                
-                // Show logout message
-                alert('Session expired due to inactivity. You will be redirected to the login page.');
-                
-                // Redirect to main page
-                window.location.href = '../index.html';
+        });
+
+        // Update available balance based on selected account
+        function updateAvailableBalance(selectElement, balanceElement) {
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            if (selectedOption.value === 'checking') {
+                balanceElement.textContent = '$7,657,000.00';
+            } else if (selectedOption.value === 'savings') {
+                balanceElement.textContent = '$125,000.00';
             }
         }
 
-        // Routing number to bank name mapping
-        const routingToBankMap = {
-            '021000021': 'JPMorgan Chase Bank',
-            '267084131': 'JPMorgan Chase Bank',
-            '322271627': 'JPMorgan Chase Bank',
-            '026009593': 'Bank of America',
-            '053000196': 'Bank of America',
-            '111000025': 'Wells Fargo Bank',
-            '121000248': 'Wells Fargo Bank',
-            '021200025': 'Citibank',
-            '254070116': 'Citibank',
-            '063100277': 'U.S. Bank',
-            '091000019': 'U.S. Bank',
-            '053000219': 'PNC Bank',
-            '043000096': 'PNC Bank',
-            '044000804': 'Truist Bank',
-            '053101121': 'Truist Bank',
-            '071000013': 'TD Bank',
-            '054001725': 'TD Bank',
-            '081000032': 'Capital One',
-            '051405515': 'Capital One',
+        // Add event listeners for balance updates
+        document.getElementById('fromAccount').addEventListener('change', function() {
+            updateAvailableBalance(this, document.getElementById('availableBalance'));
+        });
 
-    // Regional Banks
-            '124003116': 'Regions Bank',
-            '062000019': 'Regions Bank',
-            '075000019': 'Huntington National Bank',
-            '044000024': 'Huntington National Bank',
-            '124085244': 'Fifth Third Bank',
-            '042000314': 'Fifth Third Bank',
-            '103000648': 'KeyBank',
-            '041001039': 'KeyBank',
-            '031302955': 'M&T Bank',
-            '022000046': 'M&T Bank',
-            '222371863': 'Santander Bank',
-            '011075150': 'Santander Bank',
-            '114000093': 'Eastern Bank',
-            '211370545': 'FirstBank',
+        document.getElementById('fromAccountExternal').addEventListener('change', function() {
+            updateAvailableBalance(this, document.getElementById('availableBalanceExternal'));
+        });
 
-    // Credit Unions
-            '314074269': 'Navy Federal Credit Union',
-            '256074974': 'Navy Federal Credit Union',
-            '211391825': 'Pentagon Federal Credit Union',
-            '053207766': 'Pentagon Federal Credit Union',
-            '307070005': 'State Employees Credit Union',
-            '253177049': 'Golden 1 Credit Union',
-            '322281507': 'Schools First Federal Credit Union',
-            '314089681': 'Boeing Employees Credit Union',
+        document.getElementById('fromAccountBank').addEventListener('change', function() {
+            updateAvailableBalance(this, document.getElementById('availableBalanceBank'));
+        });
 
-    // Community Banks
-            '101000187': 'Webster Bank',
-            '221172186': 'Webster Bank',
-            '011103093': 'Bangor Savings Bank',
-            '211274450': 'First National Bank',
-            '053902197': 'First Citizens Bank',
-            '253177832': 'First Citizens Bank',
-            '114924742': 'Frost Bank',
-            '111322994': 'Frost Bank',
+        // Form submission handlers
+        document.getElementById('internalTransferForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showTaxAlert();
+        });
 
-    // Online/Digital Banks
-            '031201360': 'Ally Bank',
-            '124085066': 'Ally Bank',
-            '102001017': 'Charles Schwab Bank',
-            '121202211': 'Goldman Sachs Bank',
-            '031176110': 'USAA Federal Savings Bank',
-            '314074269': 'USAA Federal Savings Bank',
+        document.getElementById('externalTransferForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showTaxAlert();
+        });
 
-    // Investment/Brokerage Banks
-            '021000018': 'Bank of New York Mellon',
-            '044000037': 'State Street Bank',
-            '111000614': 'Northern Trust',
-            '071000288': 'Deutsche Bank',
-            '026013673': 'BMO Harris Bank',
-            '071025661': 'BMO Harris Bank',
+        document.getElementById('externalBankTransferForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showTaxAlert();
+        });
 
-    // Specialty Banks
-            '122000247': 'American Express Bank',
-            '124071889': 'Discover Bank',
-            '031100869': 'Axos Bank',
-            '302075319': 'Cross River Bank',
-            '084106768': 'Citizens Bank',
-            '011500120': 'Citizens Bank',
-
-    // State/Regional Specific
-            '111900659': 'Texas Capital Bank',
-            '113193532': 'Comerica Bank',
-            '072000326': 'Comerica Bank',
-            '121141819': 'Pacific Premier Bank',
-            '122242597': 'Union Bank',
-            '063107513': 'Associated Bank',
-            '075900575': 'Associated Bank',
-
-    // Additional Major Banks
-            '101205681': 'Webster First Federal Credit Union',
-            '061092387': 'First Merchants Bank',
-            '074908594': 'Simmons Bank',
-            '082902757': 'UMB Bank',
-            '101000019': 'Federal Reserve Bank',
-            '011001234': 'Bank of New Hampshire',
-            '211275352': 'First Bank',
-
-    // International Banks (US Operations)
-            '021001088': 'Deutsche Bank Trust Company',
-            '026013673': 'BMO Harris Bank',
-            '021000322': 'Bank of China',
-            '026013673': 'Toronto-Dominion Bank',
-
-    // Additional Credit Unions
-            '272483905': 'ESL Federal Credit Union',
-            '307086691': 'Vystar Credit Union',
-            '263179817': 'America First Credit Union',
-            '324377516': 'Alliant Credit Union',
-            '271992695': 'DCU (Digital Federal Credit Union)',
-
-    // Community Development Banks
-            '053902197': 'Live Oak Bank',
-            '084106768': 'Celtic Bank',
-            '124085244': 'Republic Bank',
-            '053100300': 'BB&T (now Truist)',
-
-    // Neobanks/Fintech (Banking Partners)
-            '031176110': 'Chime (Bancorp Bank)',
-            '103100195': 'Varo Bank',
-            '084106768': 'Current (Choice Financial Group)',
-            '124085066': 'SoFi (Bancorp Bank)'
-        };
-
-        // Function to show tax alert
+        // Tax alert modal functions
         function showTaxAlert() {
             document.getElementById('taxAlertOverlay').style.display = 'flex';
         }
 
-        // Function to close tax alert
         function closeTaxAlert() {
             document.getElementById('taxAlertOverlay').style.display = 'none';
         }
 
-        // Main DOMContentLoaded event
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize auto-logout
-            new AutoLogout();
+        // Auto-logout functionality
+        let logoutTimer;
+        let countdownTimer;
+        let countdownValue = 30;
 
-            // Transfer tabs functionality
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    // Remove active class from all buttons and tabs
-                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-                    
-                    // Add active class to clicked button
-                    this.classList.add('active');
-                    
-                    // Show corresponding tab
-                    const tabId = this.getAttribute('data-tab') + '-tab';
-                    document.getElementById(tabId).classList.add('active');
-                });
-            });
-            
-            // Show/hide future date field
-            document.getElementById('date').addEventListener('change', function() {
-                const futureDateField = document.getElementById('futureDateField');
-                if (this.value === 'future') {
-                    futureDateField.style.display = 'block';
-                } else {
-                    futureDateField.style.display = 'none';
-                }
-            });
-            
-            // Show/hide new recipient fields
-            document.getElementById('recipient').addEventListener('change', function() {
-                const newRecipientFields = document.getElementById('newRecipientFields');
-                if (this.value === 'new') {
-                    newRecipientFields.style.display = 'block';
-                } else {
-                    newRecipientFields.style.display = 'none';
-                }
-            });
+        function startLogoutTimer() {
+            logoutTimer = setTimeout(showLogoutWarning, 5 * 60 * 1000); // 5 minutes
+        }
 
-            // Bank name generation from routing number
-            document.getElementById('recipientRouting').addEventListener('input', function() {
-                const routingNumber = this.value.replace(/\D/g, ''); // Remove non-digits
-                const bankDisplay = document.getElementById('bankNameDisplay');
+        function resetLogoutTimer() {
+            clearTimeout(logoutTimer);
+            clearInterval(countdownTimer);
+            document.getElementById('logoutWarningModal').style.display = 'none';
+            startLogoutTimer();
+        }
+
+        function showLogoutWarning() {
+            document.getElementById('logoutWarningModal').style.display = 'flex';
+            countdownValue = 30;
+            document.getElementById('logoutCountdown').textContent = countdownValue;
+            
+            countdownTimer = setInterval(function() {
+                countdownValue--;
+                document.getElementById('logoutCountdown').textContent = countdownValue;
                 
-                if (routingNumber.length === 9) {
-                    const bankName = routingToBankMap[routingNumber];
-                    if (bankName) {
-                        bankDisplay.textContent = `Bank: ${bankName}`;
-                        bankDisplay.style.color = '#28a745';
-                    } else {
-                        bankDisplay.textContent = 'Bank: Unknown routing number';
-                        bankDisplay.style.color = '#dc3545';
-                    }
-                } else if (routingNumber.length > 0) {
-                    bankDisplay.textContent = 'Enter 9-digit routing number';
-                    bankDisplay.style.color = '#6c757d';
-                } else {
-                    bankDisplay.textContent = '';
+                if (countdownValue <= 0) {
+                    clearInterval(countdownTimer);
+                    window.location.href = '../index.html';
                 }
-            });
-            
-            // Form submission with tax alert
-            document.getElementById('internalTransferForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                showTaxAlert();
-            });
+            }, 1000);
+        }
 
-            document.getElementById('externalTransferForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                showTaxAlert();
-            });
-            
-            // Format transfer amounts
-            document.querySelectorAll('.transfer-amount').forEach(element => {
-                const amount = parseFloat(element.textContent.replace(/[^0-9.-]+/g, ''));
-                element.textContent = '$' + amount.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-            });
-
-            // Close modal when clicking outside
-            document.getElementById('taxAlertOverlay').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeTaxAlert();
-                }
-            });
+        // Activity listeners
+        ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(function(event) {
+            document.addEventListener(event, resetLogoutTimer, true);
         });
+
+        // Logout warning modal event listeners
+        document.getElementById('stayLoggedIn').addEventListener('click', function() {
+            resetLogoutTimer();
+        });
+
+        document.getElementById('logoutNow').addEventListener('click', function() {
+            window.location.href = '../index.html';
+        });
+
+        // Start the logout timer
+        startLogoutTimer();
+
+        // Prevent form resubmission on page refresh
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
     </script>
 </body>
 </html>
