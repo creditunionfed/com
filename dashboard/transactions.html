@@ -43,69 +43,6 @@
             line-height: 1.6;
         }
 
-        /* Session timeout modal */
-        .timeout-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
-            z-index: 10000;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .timeout-modal.show {
-            display: flex;
-        }
-
-        .timeout-content {
-            background: var(--background-card);
-            padding: 2rem;
-            border-radius: 16px;
-            text-align: center;
-            max-width: 400px;
-            box-shadow: var(--shadow-xl);
-            border: 1px solid var(--border-light);
-            animation: slideUp 0.3s ease-out;
-        }
-
-        .timeout-icon {
-            font-size: 3rem;
-            color: var(--warning-color);
-            margin-bottom: 1rem;
-        }
-
-        .timeout-content h3 {
-            color: var(--danger-color);
-            margin-bottom: 1rem;
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .timeout-content p {
-            margin-bottom: 1rem;
-            color: var(--text-secondary);
-        }
-
-        .countdown {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--danger-color);
-            margin: 1.5rem 0;
-            text-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
-        }
-
-        .timeout-buttons {
-            display: flex;
-            gap: 0.75rem;
-            justify-content: center;
-        }
-
         /* Dashboard Layout */
         .dashboard-layout {
             display: flex;
@@ -276,6 +213,11 @@
             transition: all 0.2s ease;
         }
 
+        .sidebar-toggle:hover {
+            background: var(--background-main);
+            color: var(--primary-color);
+        }
+
         .dashboard-header h1 {
             font-size: 1.5rem;
             font-weight: 700;
@@ -344,86 +286,50 @@
             margin: 0 auto;
         }
 
-        /* Enhanced Transaction Filters */
+        /* Transaction Filters */
         .transaction-filters {
             background: var(--background-card);
-            border: 1px solid var(--border-light);
             border-radius: 16px;
-            padding: 2rem;
+            padding: 1.5rem;
             margin-bottom: 2rem;
-            box-shadow: var(--shadow-lg);
-            position: relative;
-            overflow: hidden;
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        .transaction-filters::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--gradient-primary);
-        }
-
-        .filters-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border-light);
-        }
-
-        .filters-header h2 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .filters-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: var(--gradient-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.125rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-light);
         }
 
         .filter-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem;
-            align-items: end;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+            flex-wrap: wrap;
         }
 
         .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
+            flex: 1;
+            min-width: 200px;
         }
 
         .filter-group label {
-            font-weight: 600;
+            display: block;
+            font-weight: 500;
             color: var(--text-primary);
+            margin-bottom: 0.5rem;
             font-size: 0.875rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .filter-group select,
         .filter-group input {
-            padding: 0.875rem 1rem;
+            width: 100%;
+            padding: 0.75rem 1rem;
             border: 1px solid var(--border-light);
-            border-radius: 10px;
+            border-radius: 8px;
             font-size: 0.875rem;
             background: white;
             transition: all 0.2s ease;
-            font-family: inherit;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1rem;
         }
 
         .filter-group select:focus,
@@ -431,69 +337,67 @@
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-outline {
+            background: white;
+            border: 1px solid var(--border-light);
+            color: var(--text-primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--background-main);
+            border-color: var(--primary-color);
             transform: translateY(-1px);
         }
 
-        .custom-date-range {
-            display: none;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border-light);
-        }
-
-        .custom-date-range.show {
-            display: grid;
-        }
-
-        /* Enhanced Transaction List */
+        /* Transaction List */
         .transaction-list-section {
             background: var(--background-card);
             border-radius: 16px;
-            box-shadow: var(--shadow-lg);
-            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
             border: 1px solid var(--border-light);
-            animation: fadeInUp 0.6s ease-out 0.1s both;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out;
         }
 
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 2rem;
-            background: var(--gradient-card);
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .section-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 200px;
-            height: 200px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            transform: translate(50%, -50%);
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-light);
         }
 
         .section-header h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            position: relative;
-            z-index: 1;
-        }
-
-        .export-options {
-            position: relative;
-            z-index: 1;
-        }
-
-        .transaction-table-container {
-            overflow-x: auto;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
         }
 
         .transaction-table {
@@ -507,53 +411,27 @@
         }
 
         .transaction-table th {
-            padding: 1.25rem 1.5rem;
+            padding: 1rem 1.5rem;
             text-align: left;
             font-weight: 600;
-            color: var(--text-primary);
-            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            border-bottom: 2px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
         }
 
         .transaction-table tbody tr {
             border-bottom: 1px solid var(--border-light);
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .transaction-table tbody tr::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 4px;
-            background: transparent;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
 
         .transaction-table tbody tr:hover {
             background: var(--background-main);
-            transform: translateX(4px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .transaction-table tbody tr:hover::before {
-            background: var(--primary-color);
-        }
-
-        .transaction-table tbody tr.credit:hover::before {
-            background: var(--success-color);
-        }
-
-        .transaction-table tbody tr.debit:hover::before {
-            background: var(--danger-color);
         }
 
         .transaction-table td {
-            padding: 1.5rem;
+            padding: 1.25rem 1.5rem;
             vertical-align: middle;
         }
 
@@ -564,34 +442,29 @@
         }
 
         .transaction-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.125rem;
+            font-size: 1rem;
             color: white;
             background: var(--gradient-primary);
-            box-shadow: var(--shadow-md);
-            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
         }
 
-        .transaction-table tbody tr.credit .transaction-icon {
+        .credit .transaction-icon {
             background: var(--gradient-success);
         }
 
-        .transaction-table tbody tr.debit .transaction-icon {
+        .debit .transaction-icon {
             background: linear-gradient(135deg, var(--danger-color) 0%, #f87171 100%);
-        }
-
-        .transaction-table tbody tr:hover .transaction-icon {
-            transform: scale(1.05) rotate(5deg);
         }
 
         .transaction-details h3 {
             margin: 0 0 0.25rem 0;
-            font-size: 1rem;
+            font-size: 0.9375rem;
             font-weight: 600;
             color: var(--text-primary);
         }
@@ -600,27 +473,26 @@
             margin: 0;
             font-size: 0.8125rem;
             color: var(--text-secondary);
-            font-family: 'Courier New', monospace;
         }
 
         .amount {
-            font-weight: 700;
-            font-size: 1.125rem;
+            font-weight: 600;
+            font-size: 0.9375rem;
             font-family: 'Courier New', monospace;
         }
 
-        .amount.positive {
+        .credit .amount {
             color: var(--success-color);
         }
 
-        .amount.negative {
+        .debit .amount {
             color: var(--danger-color);
         }
 
         .status-completed {
             background: var(--gradient-success);
             color: white;
-            padding: 0.5rem 1rem;
+            padding: 0.375rem 0.75rem;
             border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 600;
@@ -630,127 +502,118 @@
             display: inline-block;
         }
 
-        .balance-amount {
-            font-weight: 600;
-            font-family: 'Courier New', monospace;
-            color: var(--text-primary);
-        }
-
-        /* Enhanced Pagination */
         .pagination {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 2rem;
+            padding: 1.5rem;
             background: var(--background-main);
             border-top: 1px solid var(--border-light);
         }
 
         .page-info {
-            font-weight: 600;
-            color: var(--text-primary);
+            font-weight: 500;
+            color: var(--text-secondary);
             font-size: 0.875rem;
         }
 
-        .pagination-controls {
+        .pagination-buttons {
             display: flex;
-            gap: 1rem;
+            gap: 0.75rem;
         }
 
-        /* Enhanced Buttons */
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 0.875rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            text-decoration: none;
-            border: none;
-            font-family: inherit;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
+        /* Auto-logout warning modal styles */
+        .logout-warning-modal {
+            display: none;
+            position: fixed;
             top: 0;
-            left: -100%;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s ease;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease-out;
         }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn-primary {
-            background: var(--gradient-primary);
-            color: white;
-            box-shadow: var(--shadow-md);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .btn-outline {
-            background: white;
-            border: 1px solid var(--border-light);
-            color: var(--text-primary);
-        }
-
-        .btn-outline:hover:not(:disabled) {
-            background: var(--background-main);
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        .btn:disabled:hover::before {
-            left: -100%;
-        }
-
-        /* Animations */
+        
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-
+        
+        .logout-warning-content {
+            background: var(--background-card);
+            padding: 2rem;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-light);
+            animation: slideUp 0.3s ease-out;
+        }
+        
         @keyframes slideUp {
             from { transform: translateY(20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-
-        @keyframes fadeInUp {
-            from {
-                transform: translateY(20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+        
+        .logout-warning-content h3 {
+            color: var(--danger-color);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .logout-warning-content p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+        
+        .logout-countdown {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--danger-color);
+            margin: 1.5rem 0;
+            text-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
+        }
+        
+        .logout-warning-buttons {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+        
+        .logout-warning-buttons button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .stay-logged-in {
+            background: var(--gradient-primary);
+            color: white;
+        }
+        
+        .logout-now {
+            background: var(--danger-color);
+            color: white;
+        }
+        
+        .logout-warning-buttons button:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
         }
 
         /* Responsive Design */
         @media (max-width: 1024px) {
-            .filter-row {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            .transaction-table td {
+                padding: 1rem;
             }
         }
 
@@ -775,44 +638,37 @@
                 padding: 1rem;
             }
 
-            .transaction-filters {
-                padding: 1.5rem;
+            .transaction-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
             }
 
             .filter-row {
-                grid-template-columns: 1fr;
+                flex-direction: column;
+                gap: 1rem;
             }
 
-            .custom-date-range {
-                grid-template-columns: 1fr;
-            }
-
-            .transaction-table th,
-            .transaction-table td {
-                padding: 1rem 0.75rem;
-            }
-
-            .transaction-description {
-                gap: 0.75rem;
-            }
-
-            .transaction-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 1rem;
+            .filter-group {
+                width: 100%;
             }
 
             .section-header {
-                padding: 1.5rem;
                 flex-direction: column;
+                align-items: flex-start;
                 gap: 1rem;
-                text-align: center;
+                padding: 1rem;
             }
 
             .pagination {
                 flex-direction: column;
                 gap: 1rem;
-                text-align: center;
+                align-items: flex-start;
+            }
+
+            .pagination-buttons {
+                width: 100%;
+                justify-content: space-between;
             }
         }
 
@@ -821,36 +677,58 @@
                 padding: 1rem;
             }
 
-            .filters-header {
+            .transaction-filters {
+                padding: 1rem;
+            }
+
+            .transaction-table th,
+            .transaction-table td {
+                padding: 0.75rem;
+            }
+
+            .transaction-description {
                 flex-direction: column;
-                text-align: center;
-                gap: 0.75rem;
+                align-items: flex-start;
+                gap: 0.5rem;
             }
 
-            .transaction-table {
-                font-size: 0.8125rem;
+            .transaction-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 0.875rem;
             }
+        }
 
-            .btn {
-                padding: 0.625rem 1.25rem;
-                font-size: 0.8125rem;
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Session Timeout Modal -->
-    <div class="timeout-modal" id="timeoutModal">
-        <div class="timeout-content">
-            <div class="timeout-icon">
-                <i class="fas fa-clock"></i>
+    <!-- Auto-logout Warning Modal -->
+    <div class="logout-warning-modal" id="logoutWarningModal">
+        <div class="logout-warning-content">
+            <div class="logout-warning-icon">
+                <i class="fas fa-clock fa-3x" style="color: var(--warning-color);"></i>
             </div>
             <h3>Session Timeout Warning</h3>
             <p>Your session will expire due to inactivity. You will be logged out in:</p>
-            <div class="countdown" id="countdown">30</div>
-            <div class="timeout-buttons">
-                <button class="btn btn-primary" onclick="extendSession()">Stay Logged In</button>
-                <button class="btn btn-outline" onclick="logoutNow()">Logout Now</button>
+            <div class="logout-countdown" id="logoutCountdown">30</div>
+            <div class="logout-warning-buttons">
+                <button class="stay-logged-in" onclick="extendSession()">
+                    <i class="fas fa-user-clock"></i> Stay Logged In
+                </button>
+                <button class="logout-now" onclick="logoutNow()">
+                    <i class="fas fa-sign-out-alt"></i> Logout Now
+                </button>
             </div>
         </div>
     </div>
@@ -941,14 +819,8 @@
 
             <!-- Dashboard Content -->
             <div class="dashboard-content">
-                <!-- Enhanced Transaction Filters -->
+                <!-- Transaction Filters -->
                 <section class="transaction-filters">
-                    <div class="filters-header">
-                        <div class="filters-icon">
-                            <i class="fas fa-filter"></i>
-                        </div>
-                        <h2>Filter Transactions</h2>
-                    </div>
                     <div class="filter-row">
                         <div class="filter-group">
                             <label for="account">Account</label>
@@ -976,43 +848,38 @@
                                 <option value="custom">Custom Range</option>
                             </select>
                         </div>
-                        <div class="filter-group">
-                            <button class="btn btn-primary" onclick="applyFilters()">
-                                <i class="fas fa-search"></i>
-                                Apply Filters
-                            </button>
-                        </div>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-filter"></i>
+                            Apply Filters
+                        </button>
                     </div>
-                    <div class="custom-date-range" id="customDateRange">
+                    <div class="filter-row" id="customDateRange" style="display: none;">
                         <div class="filter-group">
-                            <label for="startDate">From Date</label>
+                            <label for="startDate">From</label>
                             <input type="date" id="startDate">
                         </div>
                         <div class="filter-group">
-                            <label for="endDate">To Date</label>
+                            <label for="endDate">To</label>
                             <input type="date" id="endDate">
                         </div>
                     </div>
                 </section>
 
-                <!-- Enhanced Transaction List -->
+                <!-- Transaction List -->
                 <section class="transaction-list-section">
                     <div class="section-header">
                         <h2>Recent Transactions</h2>
-                        <div class="export-options">
-                            <button class="btn btn-outline">
-                                <i class="fas fa-download"></i>
-                                Export CSV
-                            </button>
-                        </div>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-download"></i>
+                            Export
+                        </button>
                     </div>
-                    
-                    <div class="transaction-table-container">
+                    <div class="transaction-list-container">
                         <table class="transaction-table">
                             <thead>
                                 <tr>
-                                    <th>Date & Description</th>
-                                    <th>Transaction ID</th>
+                                    <th>Date</th>
+                                    <th>Description</th>
                                     <th>Amount</th>
                                     <th>Status</th>
                                     <th>Balance</th>
@@ -1020,159 +887,138 @@
                             </thead>
                             <tbody>
                                 <tr class="credit">
+                                    <td>Oct 15, 2023</td>
                                     <td>
                                         <div class="transaction-description">
                                             <div class="transaction-icon">
-                                                <i class="fas fa-arrow-down"></i>
+                                                <i class="fas fa-building"></i>
                                             </div>
                                             <div class="transaction-details">
-                                                <h3>Customer Payment - Wedding Ring Set</h3>
-                                                <p>Dec 15, 2024 • 2:45 PM</p>
+                                                <h3>Deposit from Real Estate Pro</h3>
+                                                <p>Reference: RE20231015</p>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>#TXN-2024-1215-001</td>
-                                    <td class="amount positive">+$2,450.00</td>
+                                    <td class="amount">+$4,000,000.00</td>
                                     <td><span class="status-completed">Completed</span></td>
-                                    <td class="balance-amount">$12,847.32</td>
+                                    <td>$7,657,000.00</td>
                                 </tr>
                                 <tr class="debit">
+                                    <td>Oct 10, 2023</td>
                                     <td>
                                         <div class="transaction-description">
                                             <div class="transaction-icon">
-                                                <i class="fas fa-arrow-up"></i>
+                                                <i class="fas fa-gem"></i>
                                             </div>
                                             <div class="transaction-details">
-                                                <h3>Supplier Payment - Gold Supply Co</h3>
-                                                <p>Dec 14, 2024 • 10:30 AM</p>
+                                                <h3>Withdrawal to Diamond Wholesale</h3>
+                                                <p>Reference: DW20231010</p>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>#TXN-2024-1214-002</td>
-                                    <td class="amount negative">-$1,200.00</td>
+                                    <td class="amount">-$853,000.00</td>
                                     <td><span class="status-completed">Completed</span></td>
-                                    <td class="balance-amount">$10,397.32</td>
+                                    <td>$3,657,000.00</td>
+                                </tr>
+                                <tr class="debit">
+                                    <td>Oct 5, 2023</td>
+                                    <td>
+                                        <div class="transaction-description">
+                                            <div class="transaction-icon">
+                                                <i class="fas fa-box-open"></i>
+                                            </div>
+                                            <div class="transaction-details">
+                                                <h3>Withdrawal to Packaging Solutions</h3>
+                                                <p>Reference: PS20231005</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="amount">-$124,500.00</td>
+                                    <td><span class="status-completed">Completed</span></td>
+                                    <td>$4,510,000.00</td>
+                                </tr>
+                                <tr class="debit">
+                                    <td>Sep 28, 2023</td>
+                                    <td>
+                                        <div class="transaction-description">
+                                            <div class="transaction-icon">
+                                                <i class="fas fa-truck"></i>
+                                            </div>
+                                            <div class="transaction-details">
+                                                <h3>Withdrawal to Shipping Express</h3>
+                                                <p>Reference: SE20230928</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="amount">-$87,500.00</td>
+                                    <td><span class="status-completed">Completed</span></td>
+                                    <td>$4,634,500.00</td>
                                 </tr>
                                 <tr class="credit">
+                                    <td>Sep 20, 2023</td>
                                     <td>
                                         <div class="transaction-description">
                                             <div class="transaction-icon">
-                                                <i class="fas fa-arrow-down"></i>
+                                                <i class="fas fa-shopping-bag"></i>
                                             </div>
                                             <div class="transaction-details">
-                                                <h3>Customer Payment - Necklace Repair</h3>
-                                                <p>Dec 13, 2024 • 4:15 PM</p>
+                                                <h3>Deposit from Jewelry Sales</h3>
+                                                <p>Reference: JS20230920</p>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>#TXN-2024-1213-003</td>
-                                    <td class="amount positive">+$185.00</td>
+                                    <td class="amount">+$285,000.00</td>
                                     <td><span class="status-completed">Completed</span></td>
-                                    <td class="balance-amount">$11,597.32</td>
+                                    <td>$4,722,000.00</td>
                                 </tr>
                                 <tr class="debit">
+                                    <td>Sep 15, 2023</td>
                                     <td>
                                         <div class="transaction-description">
                                             <div class="transaction-icon">
-                                                <i class="fas fa-credit-card"></i>
+                                                <i class="fas fa-gem"></i>
                                             </div>
                                             <div class="transaction-details">
-                                                <h3>Business Insurance Payment</h3>
-                                                <p>Dec 12, 2024 • 9:00 AM</p>
+                                                <h3>Withdrawal to Gemstone Importers</h3>
+                                                <p>Reference: GI20230915</p>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>#TXN-2024-1212-004</td>
-                                    <td class="amount negative">-$450.00</td>
+                                    <td class="amount">-$428,000.00</td>
                                     <td><span class="status-completed">Completed</span></td>
-                                    <td class="balance-amount">$11,412.32</td>
-                                </tr>
-                                <tr class="credit">
-                                    <td>
-                                        <div class="transaction-description">
-                                            <div class="transaction-icon">
-                                                <i class="fas fa-arrow-down"></i>
-                                            </div>
-                                            <div class="transaction-details">
-                                                <h3>Customer Payment - Diamond Earrings</h3>
-                                                <p>Dec 11, 2024 • 1:20 PM</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>#TXN-2024-1211-005</td>
-                                    <td class="amount positive">+$3,200.00</td>
-                                    <td><span class="status-completed">Completed</span></td>
-                                    <td class="balance-amount">$11,862.32</td>
+                                    <td>$4,437,000.00</td>
                                 </tr>
                                 <tr class="debit">
+                                    <td>Sep 10, 2023</td>
                                     <td>
                                         <div class="transaction-description">
                                             <div class="transaction-icon">
-                                                <i class="fas fa-shopping-cart"></i>
+                                                <i class="fas fa-tools"></i>
                                             </div>
                                             <div class="transaction-details">
-                                                <h3>Equipment Purchase - Jewelry Tools</h3>
-                                                <p>Dec 10, 2024 • 11:45 AM</p>
+                                                <h3>Withdrawal for Equipment Purchase</h3>
+                                                <p>Reference: EP20230910</p>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>#TXN-2024-1210-006</td>
-                                    <td class="amount negative">-$675.50</td>
+                                    <td class="amount">-$152,500.00</td>
                                     <td><span class="status-completed">Completed</span></td>
-                                    <td class="balance-amount">$8,662.32</td>
-                                </tr>
-                                <tr class="credit">
-                                    <td>
-                                        <div class="transaction-description">
-                                            <div class="transaction-icon">
-                                                <i class="fas fa-arrow-down"></i>
-                                            </div>
-                                            <div class="transaction-details">
-                                                <h3>Customer Payment - Watch Repair</h3>
-                                                <p>Dec 9, 2024 • 3:30 PM</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>#TXN-2024-1209-007</td>
-                                    <td class="amount positive">+$125.00</td>
-                                    <td><span class="status-completed">Completed</span></td>
-                                    <td class="balance-amount">$9,337.82</td>
-                                </tr>
-                                <tr class="debit">
-                                    <td>
-                                        <div class="transaction-description">
-                                            <div class="transaction-icon">
-                                                <i class="fas fa-bolt"></i>
-                                            </div>
-                                            <div class="transaction-details">
-                                                <h3>Utility Payment - Electric Bill</h3>
-                                                <p>Dec 8, 2024 • 8:15 AM</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>#TXN-2024-1208-008</td>
-                                    <td class="amount negative">-$89.45</td>
-                                    <td><span class="status-completed">Completed</span></td>
-                                    <td class="balance-amount">$9,212.82</td>
+                                    <td>$4,865,000.00</td>
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-
-                    <!-- Enhanced Pagination -->
-                    <div class="pagination">
-                        <div class="page-info">
-                            Showing 1-8 of 127 transactions
-                        </div>
-                        <div class="pagination-controls">
-                            <button class="btn btn-outline" disabled>
-                                <i class="fas fa-chevron-left"></i>
-                                Previous
-                            </button>
-                            <button class="btn btn-primary">
-                                Next
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
+                        <div class="pagination">
+                            <div class="page-info">Showing 1 to 7 of 21 transactions</div>
+                            <div class="pagination-buttons">
+                                <button class="btn btn-outline" disabled>
+                                    <i class="fas fa-chevron-left"></i>
+                                    Previous
+                                </button>
+                                <button class="btn btn-outline">
+                                    Next
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -1181,48 +1027,56 @@
     </div>
 
     <script>
-        // Session timeout functionality
-        let sessionTimeoutTimer;
+        // Session timeout management
+        let sessionTimer;
         let warningTimer;
         let countdownTimer;
-        const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes
-        const WARNING_TIME = 30 * 1000; // 30 seconds before timeout
+        let countdownValue = 30;
+        const INACTIVITY_TIME = 2 * 60 * 1000; // 2 minutes in milliseconds
+        const WARNING_TIME = 30 * 1000; // 30 seconds warning
 
         function resetSessionTimer() {
-            clearTimeout(sessionTimeoutTimer);
+            clearTimeout(sessionTimer);
             clearTimeout(warningTimer);
             clearInterval(countdownTimer);
+            hideTimeoutModal();
             
-            // Hide timeout modal if showing
-            document.getElementById('timeoutModal').classList.remove('show');
-            
-            // Set warning timer
-            warningTimer = setTimeout(showTimeoutWarning, SESSION_TIMEOUT - WARNING_TIME);
-            
-            // Set session timeout
-            sessionTimeoutTimer = setTimeout(logoutUser, SESSION_TIMEOUT);
+            sessionTimer = setTimeout(() => {
+                showTimeoutWarning();
+            }, INACTIVITY_TIME - WARNING_TIME);
         }
 
         function showTimeoutWarning() {
-            const modal = document.getElementById('timeoutModal');
-            const countdown = document.getElementById('countdown');
-            modal.classList.add('show');
+            const modal = document.getElementById('logoutWarningModal');
+            const countdown = document.getElementById('logoutCountdown');
             
-            let seconds = 30;
-            countdown.textContent = seconds;
+            modal.style.display = 'flex';
+            countdownValue = 30;
+            countdown.textContent = countdownValue;
             
             countdownTimer = setInterval(() => {
-                seconds--;
-                countdown.textContent = seconds;
+                countdownValue--;
+                countdown.textContent = countdownValue;
                 
-                if (seconds <= 0) {
-                    clearInterval(countdownTimer);
+                if (countdownValue <= 0) {
                     logoutUser();
                 }
             }, 1000);
+            
+            warningTimer = setTimeout(() => {
+                logoutUser();
+            }, WARNING_TIME);
+        }
+
+        function hideTimeoutModal() {
+            const modal = document.getElementById('logoutWarningModal');
+            modal.style.display = 'none';
         }
 
         function extendSession() {
+            clearTimeout(warningTimer);
+            clearInterval(countdownTimer);
+            hideTimeoutModal();
             resetSessionTimer();
         }
 
@@ -1231,104 +1085,54 @@
         }
 
         function logoutUser() {
+            // Clear all timers
+            clearTimeout(sessionTimer);
+            clearTimeout(warningTimer);
+            clearInterval(countdownTimer);
+            
+            // Show logout message
+            alert('Session expired due to inactivity. You will be redirected to the login page.');
+            
+            // Redirect to main index page
             window.location.href = '../index.html';
         }
 
         // Track user activity
-        document.addEventListener('mousedown', resetSessionTimer);
-        document.addEventListener('mousemove', resetSessionTimer);
-        document.addEventListener('keypress', resetSessionTimer);
-        document.addEventListener('scroll', resetSessionTimer);
-        document.addEventListener('touchstart', resetSessionTimer);
+        const activityEvents = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
+        
+        activityEvents.forEach(event => {
+            document.addEventListener(event, resetSessionTimer, { passive: true });
+        });
 
-        // Initialize session timer
+        // Initialize session timer when page loads
         resetSessionTimer();
 
-        // Sidebar toggle functionality
-        const sidebarToggle = document.querySelector('.sidebar-toggle');
-        const sidebar = document.querySelector('.sidebar');
-
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-        });
-
-        // Filter functionality
-        function applyFilters() {
-            const account = document.getElementById('account').value;
-            const type = document.getElementById('type').value;
-            const dateRange = document.getElementById('date').value;
-            
-            // Show loading state
-            const button = event.target;
-            const originalText = button.innerHTML;
-            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Filtering...';
-            button.disabled = true;
-            
-            // Simulate API call
-            setTimeout(() => {
-                button.innerHTML = originalText;
-                button.disabled = false;
-                // Here you would typically filter the transactions
-                console.log('Filters applied:', { account, type, dateRange });
-            }, 1000);
-        }
-
-        // Custom date range toggle
+        // Show/hide custom date range
         document.getElementById('date').addEventListener('change', function() {
-            const customRange = document.getElementById('customDateRange');
+            const customDateRange = document.getElementById('customDateRange');
             if (this.value === 'custom') {
-                customRange.classList.add('show');
+                customDateRange.style.display = 'flex';
             } else {
-                customRange.classList.remove('show');
+                customDateRange.style.display = 'none';
             }
         });
 
-        // Export functionality
-        document.querySelector('.export-options .btn').addEventListener('click', function() {
-            const button = this;
-            const originalText = button.innerHTML;
-            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Exporting...';
-            button.disabled = true;
+        // Toggle sidebar on mobile
+        document.querySelector('.sidebar-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+
+        // Format all currency amounts in the table
+        document.querySelectorAll('.transaction-table .amount').forEach(cell => {
+            const amountText = cell.textContent;
+            const amount = parseFloat(amountText.replace(/[^0-9.-]+/g, ''));
+            const isNegative = amountText.startsWith('-');
             
-            // Simulate export
-            setTimeout(() => {
-                button.innerHTML = originalText;
-                button.disabled = false;
-                // Here you would trigger the actual export
-                console.log('Export initiated');
-            }, 2000);
-        });
-
-        // Add smooth scrolling for better UX
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+            cell.textContent = (isNegative ? '-' : '+') + '$' + Math.abs(amount).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
             });
         });
-
-        // Enhanced hover effects for transaction rows
-        document.querySelectorAll('.transaction-table tbody tr').forEach(row => {
-            row.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateX(8px)';
-            });
-            
-            row.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateX(0)';
-            });
-        });
-
-        // Responsive behavior
-        function handleResize() {
-            if (window.innerWidth <= 768) {
-                sidebar.classList.remove('active');
-            }
-        }
-
-        window.addEventListener('resize', handleResize);
-        handleResize(); // Initial check
     </script>
 </body>
 </html>
