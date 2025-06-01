@@ -4,14 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Overview | Tevex Community Credit Union</title>
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        .status-restricted {
-            color: #ffd700; /* Gold yellow */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        
+
+        :root {
+            --primary-color: #1e40af;
+            --primary-light: #3b82f6;
+            --primary-dark: #1e3a8a;
+            --secondary-color: #0f172a;
+            --accent-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --success-color: #10b981;
+            --background-main: #f8fafc;
+            --background-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-light: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            --gradient-card: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-success: linear-gradient(135deg, var(--success-color) 0%, #34d399 100%);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
         /* Auto-logout warning modal styles */
         .logout-warning-modal {
             display: none;
@@ -20,65 +51,752 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
             z-index: 10000;
             justify-content: center;
             align-items: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         
         .logout-warning-content {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
+            background: var(--background-card);
+            padding: 2rem;
+            border-radius: 16px;
             text-align: center;
             max-width: 400px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-light);
+            animation: slideUp 0.3s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         
         .logout-warning-content h3 {
-            color: #d32f2f;
-            margin-bottom: 15px;
-            font-size: 1.2em;
+            color: var(--danger-color);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            font-weight: 600;
         }
         
         .logout-warning-content p {
-            margin-bottom: 20px;
-            color: #666;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
         }
         
         .logout-countdown {
-            font-size: 2em;
-            font-weight: bold;
-            color: #d32f2f;
-            margin: 15px 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--danger-color);
+            margin: 1.5rem 0;
+            text-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
         }
         
         .logout-warning-buttons {
             display: flex;
-            gap: 10px;
+            gap: 0.75rem;
             justify-content: center;
         }
         
         .logout-warning-buttons button {
-            padding: 10px 20px;
+            padding: 0.75rem 1.5rem;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
         
         .stay-logged-in {
-            background: #1976d2;
+            background: var(--gradient-primary);
             color: white;
         }
         
         .logout-now {
-            background: #d32f2f;
+            background: var(--danger-color);
             color: white;
         }
         
         .logout-warning-buttons button:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Dashboard Layout */
+        .dashboard-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--background-card);
+            border-right: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-lg);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+            background: var(--gradient-primary);
+        }
+
+        .sidebar-logo {
+            height: 40px;
+            width: auto;
+            filter: brightness(0) invert(1);
+        }
+
+        .user-profile {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .user-info h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .user-info p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1rem 0;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin: 0.25rem 1rem;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .sidebar-nav a:hover {
+            background: var(--background-main);
+            color: var(--primary-color);
+            transform: translateX(4px);
+        }
+
+        .sidebar-nav li.active a {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .sidebar-nav i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 1rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--danger-color);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.1);
+            transform: translateX(4px);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            min-height: 100vh;
+            background: var(--background-main);
+        }
+
+        /* Header */
+        .dashboard-header {
+            background: var(--background-card);
+            border-bottom: 1px solid var(--border-light);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .sidebar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-toggle:hover {
+            background: var(--background-main);
+            color: var(--primary-color);
+        }
+
+        .dashboard-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notification-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .notification-btn:hover {
+            background: var(--background-main);
+            color: var(--primary-color);
+        }
+
+        .badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--danger-color);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.125rem 0.375rem;
+            border-radius: 50px;
+            min-width: 1.25rem;
+            text-align: center;
+        }
+
+        .user-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: none;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .user-btn:hover {
+            background: var(--background-main);
+            color: var(--primary-color);
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Account Summary */
+        .account-summary {
+            margin-bottom: 2rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .summary-card {
+            background: var(--gradient-card);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(50%, -50%);
+        }
+
+        .summary-card h2 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
             opacity: 0.9;
+        }
+
+        .account-number {
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+            font-family: 'Courier New', monospace;
+        }
+
+        .account-balance {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .account-details {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .detail-item span:first-child {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        .detail-item span:last-child {
+            font-weight: 600;
+        }
+
+        .status-restricted {
+            color: var(--warning-color);
+            font-weight: 600;
+        }
+
+        .summary-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--background-card);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-color);
+        }
+
+        .action-btn i {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 8px;
+            font-size: 0.875rem;
+        }
+
+        .action-btn span {
+            font-weight: 500;
+        }
+
+        /* Recent Transactions */
+        .recent-transactions {
+            background: var(--background-card);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-light);
+            overflow: hidden;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .section-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .view-all {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .view-all:hover {
+            color: var(--primary-dark);
+        }
+
+        .transactions-list {
+            padding: 1rem 0;
+        }
+
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2rem;
+            transition: all 0.2s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .transaction-item:hover {
+            background: var(--background-main);
+            border-left-color: var(--primary-color);
+        }
+
+        .transaction-item.credit {
+            border-left-color: var(--success-color);
+        }
+
+        .transaction-item.debit {
+            border-left-color: var(--danger-color);
+        }
+
+        .transaction-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: white;
+        }
+
+        .transaction-item.credit .transaction-icon {
+            background: var(--gradient-success);
+        }
+
+        .transaction-item.debit .transaction-icon {
+            background: linear-gradient(135deg, var(--danger-color) 0%, #f87171 100%);
+        }
+
+        .transaction-details {
+            flex: 1;
+        }
+
+        .transaction-details h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .transaction-details p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .transaction-amount {
+            font-size: 1.125rem;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        .transaction-item.credit .transaction-amount {
+            color: var(--success-color);
+        }
+
+        .transaction-item.debit .transaction-amount {
+            color: var(--danger-color);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            background: var(--background-card);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-light);
+        }
+
+        .quick-actions h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .action-card {
+            background: var(--background-card);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        .action-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .action-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .action-card:hover .action-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .action-card h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .action-card p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .account-summary {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .sidebar-toggle {
+                display: block;
+            }
+
+            .dashboard-content {
+                padding: 1rem;
+            }
+
+            .account-balance {
+                font-size: 2rem;
+            }
+
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .transaction-item {
+                padding: 1rem;
+            }
+
+            .section-header {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-header {
+                padding: 1rem;
+            }
+
+            .summary-card {
+                padding: 1.5rem;
+            }
+
+            .account-balance {
+                font-size: 1.75rem;
+            }
+
+            .quick-actions {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes slideInFromLeft {
+            from {
+                transform: translateX(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .account-summary {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .recent-transactions {
+            animation: fadeInUp 0.6s ease-out 0.1s both;
+        }
+
+        .quick-actions {
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+
+        .transaction-item {
+            animation: slideInFromLeft 0.4s ease-out;
+        }
+
+        .action-card {
+            animation: fadeInUp 0.4s ease-out;
         }
     </style>
 </head>
@@ -190,7 +908,7 @@
                 <!-- Account Summary -->
                 <section class="account-summary">
                     <div class="summary-card">
-                        <h2>Primary Checking</h2>
+                        <h2>Primary Checking Account</h2>
                         <div class="account-number">•••• •••• •••• 5678</div>
                         <div class="account-balance">$7,657,000.00</div>
                         <div class="account-details">
@@ -207,19 +925,19 @@
                     <div class="summary-actions">
                         <a href="transfer.html" class="action-btn">
                             <i class="fas fa-money-bill-transfer"></i>
-                            <span>Transfer</span>
+                            <span>Transfer Funds</span>
                         </a>
                         <a href="#" class="action-btn">
                             <i class="fas fa-file-invoice-dollar"></i>
                             <span>Pay Bills</span>
                         </a>
-                        <a href="#" class="action-btn">
+                        <a href="transactions.html" class="action-btn">
                             <i class="fas fa-exchange-alt"></i>
-                            <span>History</span>
+                            <span>View History</span>
                         </a>
                         <a href="#" class="action-btn">
                             <i class="fas fa-ellipsis-h"></i>
-                            <span>More</span>
+                            <span>More Options</span>
                         </a>
                     </div>
                 </section>
@@ -228,7 +946,7 @@
                 <section class="recent-transactions">
                     <div class="section-header">
                         <h2>Recent Transactions</h2>
-                        <a href="transactions.html" class="view-all">View All</a>
+                        <a href="transactions.html" class="view-all">View All Transactions</a>
                     </div>
                     <div class="transactions-list">
                         <div class="transaction-item credit">
@@ -237,7 +955,7 @@
                             </div>
                             <div class="transaction-details">
                                 <h3>Real Estate Pro</h3>
-                                <p>Deposit • Oct 15, 2023</p>
+                                <p>Direct Deposit • October 15, 2023</p>
                             </div>
                             <div class="transaction-amount">+$4,000,000.00</div>
                         </div>
@@ -246,8 +964,8 @@
                                 <i class="fas fa-gem"></i>
                             </div>
                             <div class="transaction-details">
-                                <h3>Diamond Wholesale</h3>
-                                <p>Withdrawal • Oct 10, 2023</p>
+                                <h3>Diamond Wholesale Ltd</h3>
+                                <p>Business Payment • October 10, 2023</p>
                             </div>
                             <div class="transaction-amount">-$853,000.00</div>
                         </div>
@@ -256,8 +974,8 @@
                                 <i class="fas fa-box-open"></i>
                             </div>
                             <div class="transaction-details">
-                                <h3>Packaging Solutions</h3>
-                                <p>Withdrawal • Oct 5, 2023</p>
+                                <h3>Packaging Solutions Inc</h3>
+                                <p>Vendor Payment • October 5, 2023</p>
                             </div>
                             <div class="transaction-amount">-$124,500.00</div>
                         </div>
@@ -266,8 +984,8 @@
                                 <i class="fas fa-truck"></i>
                             </div>
                             <div class="transaction-details">
-                                <h3>Shipping Express</h3>
-                                <p>Withdrawal • Sep 28, 2023</p>
+                                <h3>Shipping Express Co</h3>
+                                <p>Logistics Payment • September 28, 2023</p>
                             </div>
                             <div class="transaction-amount">-$87,500.00</div>
                         </div>
@@ -283,28 +1001,28 @@
                                 <i class="fas fa-money-bill-transfer"></i>
                             </div>
                             <h3>Transfer Money</h3>
-                            <p>Between your accounts or to others</p>
+                            <p>Move funds between your accounts or send money to others securely</p>
                         </a>
                         <a href="loans.html" class="action-card">
                             <div class="action-icon">
                                 <i class="fas fa-hand-holding-usd"></i>
                             </div>
                             <h3>Apply for Loan</h3>
-                            <p>Personal, auto, or business loans</p>
+                            <p>Explore personal, auto, or business loan options with competitive rates</p>
                         </a>
                         <a href="#" class="action-card">
                             <div class="action-icon">
                                 <i class="fas fa-file-invoice-dollar"></i>
                             </div>
                             <h3>Pay Bills</h3>
-                            <p>Schedule one-time or recurring payments</p>
+                            <p>Schedule one-time payments or set up automatic recurring bill payments</p>
                         </a>
                         <a href="#" class="action-card">
                             <div class="action-icon">
                                 <i class="fas fa-credit-card"></i>
                             </div>
                             <h3>Card Services</h3>
-                            <p>Manage your debit/credit cards</p>
+                            <p>Manage your debit and credit cards, view statements, and update settings</p>
                         </a>
                     </div>
                 </section>
@@ -312,8 +1030,6 @@
         </main>
     </div>
 
-    <script src="../js/main.js"></script>
-    <script src="../js/dashboard.js"></script>
     <script>
         // Auto-logout functionality
         class AutoLogout {
@@ -422,7 +1138,7 @@
             }
         }
         
-        // Original dashboard functionality
+        // Dashboard functionality
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize auto-logout
             new AutoLogout();
@@ -431,17 +1147,21 @@
             const sidebarToggle = document.querySelector('.sidebar-toggle');
             const sidebar = document.querySelector('.sidebar');
             
-            sidebarToggle.addEventListener('click', function() {
-                sidebar.classList.toggle('active');
-            });
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('active');
+                });
+            }
             
             // Toggle user menu
             const userBtn = document.querySelector('.user-btn');
             const userMenu = document.querySelector('.user-menu');
             
-            userBtn.addEventListener('click', function() {
-                userMenu.classList.toggle('active');
-            });
+            if (userBtn) {
+                userBtn.addEventListener('click', function() {
+                    userMenu.classList.toggle('active');
+                });
+            }
             
             // Close menus when clicking outside
             document.addEventListener('click', function(e) {
@@ -453,6 +1173,69 @@
                     userMenu.classList.remove('active');
                 }
             });
+
+            // Add smooth scrolling for better UX
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Add loading states for action buttons
+            document.querySelectorAll('.action-btn, .action-card').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const icon = this.querySelector('i');
+                    if (icon && !this.getAttribute('href').startsWith('#')) {
+                        icon.classList.add('fa-spin');
+                        setTimeout(() => {
+                            icon.classList.remove('fa-spin');
+                        }, 1000);
+                    }
+                });
+            });
+
+            // Add hover effects for transaction items
+            document.querySelectorAll('.transaction-item').forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateX(8px)';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateX(0)';
+                });
+            });
+
+            // Animate numbers on load
+            const animateValue = (element, start, end, duration) => {
+                let startTimestamp = null;
+                const step = (timestamp) => {
+                    if (!startTimestamp) startTimestamp = timestamp;
+                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                    const value = Math.floor(progress * (end - start) + start);
+                    element.textContent = ' + value.toLocaleString() + '.00';
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    }
+                };
+                window.requestAnimationFrame(step);
+            };
+
+            // Animate the main balance
+            const balanceElement = document.querySelector('.account-balance');
+            if (balanceElement) {
+                const balanceValue = 7657000;
+                balanceElement.textContent = '$0.00';
+                setTimeout(() => {
+                    animateValue(balanceElement, 0, balanceValue, 2000);
+                }, 500);
+            }
         });
     </script>
 </body>
