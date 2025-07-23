@@ -827,21 +827,6 @@
         </div>
     </div>
 
-    <!-- Tax Alert Modal -->
-    <div class="tax-alert-overlay" id="taxAlertOverlay">
-        <div class="tax-alert-modal">
-            <div class="tax-alert-icon">
-                <i class="fas fa-exclamation-triangle"></i>
-            </div>
-            <div class="tax-alert-title">Transfer Restricted</div>
-            <div class="tax-alert-message">
-                Tax and Reporting Obligations Not Settled<br>
-                Please contact customer service to resolve this matter before proceeding with transfers.
-            </div>
-            <button class="tax-alert-button" onclick="closeTaxAlert()">Understood</button>
-        </div>
-    </div>
-
     <!-- Dashboard Navigation -->
     <div class="dashboard-layout">
         <!-- Sidebar -->
@@ -1127,6 +1112,222 @@
     </div>
 
     <script>
+	   // Add this code to your existing JavaScript in transfer.html
+
+// Wire Transfer Function
+function processWireTransfer(transferData) {
+    // Get account balances from the page
+    let checkingBalance = 7657000.00;
+    let savingsBalance = 125000.00;
+    
+    // Determine which account is being debited
+    if (transferData.fromAccount === 'checking') {
+        checkingBalance -= transferData.amount;
+    } else if (transferData.fromAccount === 'savings') {
+        savingsBalance -= transferData.amount;
+    }
+    
+    // Create transfer receipt
+    const transferReceipt = `
+        <div class="transfer-receipt-modal" style="
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        ">
+            <div class="receipt-content" style="
+                background: white;
+                padding: 2rem;
+                border-radius: 16px;
+                max-width: 500px;
+                width: 90%;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+                font-family: 'Inter', sans-serif;
+            ">
+                <div class="receipt-header" style="
+                    text-align: center;
+                    margin-bottom: 1.5rem;
+                    padding-bottom: 1rem;
+                    border-bottom: 1px solid #e2e8f0;
+                ">
+                    <div class="status-icon" style="
+                        width: 60px;
+                        height: 60px;
+                        background: #10b981;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        margin: 0 auto 1rem;
+                        color: white;
+                        font-size: 1.5rem;
+                    ">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <h2 style="
+                        color: #10b981;
+                        font-size: 1.5rem;
+                        font-weight: 700;
+                        margin-bottom: 0.5rem;
+                    ">Transfer Completed</h2>
+                    <p style="color: #64748b;">Your transfer was successful</p>
+                </div>
+                
+                <div class="receipt-details" style="margin-bottom: 1.5rem;">
+                    <div class="detail-row" style="
+                        display: flex;
+                        justify-content: space-between;
+                        padding: 0.75rem 0;
+                        border-bottom: 1px solid #f1f5f9;
+                    ">
+                        <span style="color: #64748b;">Amount</span>
+                        <span style="font-weight: 600;">$${transferData.amount.toFixed(2)}</span>
+                    </div>
+                    <div class="detail-row" style="
+                        display: flex;
+                        justify-content: space-between;
+                        padding: 0.75rem 0;
+                        border-bottom: 1px solid #f1f5f9;
+                    ">
+                        <span style="color: #64748b;">From Account</span>
+                        <span style="font-weight: 600;">${transferData.fromAccount === 'checking' ? 'Primary Checking (••••5678)' : 'Business Savings (••••9012)'}</span>
+                    </div>
+                    <div class="detail-row" style="
+                        display: flex;
+                        justify-content: space-between;
+                        padding: 0.75rem 0;
+                        border-bottom: 1px solid #f1f5f9;
+                    ">
+                        <span style="color: #64748b;">To Account</span>
+                        <span style="font-weight: 600;">${transferData.toAccount}</span>
+                    </div>
+                    <div class="detail-row" style="
+                        display: flex;
+                        justify-content: space-between;
+                        padding: 0.75rem 0;
+                        border-bottom: 1px solid #f1f5f9;
+                    ">
+                        <span style="color: #64748b;">Date</span>
+                        <span style="font-weight: 600;">${new Date().toLocaleDateString()}</span>
+                    </div>
+                    <div class="detail-row" style="
+                        display: flex;
+                        justify-content: space-between;
+                        padding: 0.75rem 0;
+                        border-bottom: 1px solid #f1f5f9;
+                    ">
+                        <span style="color: #64748b;">Reference</span>
+                        <span style="font-weight: 600;">${transferData.memo || 'N/A'}</span>
+                    </div>
+                </div>
+                
+                <div class="receipt-balance" style="
+                    background: #f8fafc;
+                    padding: 1rem;
+                    border-radius: 8px;
+                    margin-bottom: 1.5rem;
+                ">
+                    <div style="
+                        display: flex;
+                        justify-content: space-between;
+                        margin-bottom: 0.5rem;
+                    ">
+                        <span style="color: #64748b;">Remaining Balance:</span>
+                        <span style="font-weight: 700;">$${(transferData.fromAccount === 'checking' ? checkingBalance : savingsBalance).toFixed(2)}</span>
+                    </div>
+                    <div style="font-size: 0.875rem; color: #64748b;">
+                        ${transferData.fromAccount === 'checking' ? 
+                          'Business Savings: $' + savingsBalance.toFixed(2) : 
+                          'Primary Checking: $' + checkingBalance.toFixed(2)}
+                    </div>
+                </div>
+                
+                <button class="receipt-close-btn" style="
+                    width: 100%;
+                    padding: 0.875rem;
+                    background: #1e40af;
+                    color: white;
+                    border: none;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                " onclick="this.closest('.transfer-receipt-modal').remove()">
+                    Done
+                </button>
+            </div>
+        </div>
+    `;
+    
+    // Add receipt to the page
+    document.body.insertAdjacentHTML('beforeend', transferReceipt);
+    
+    // Update the available balance display
+    if (transferData.fromAccount === 'checking') {
+        document.getElementById('availableBalance').textContent = `$${checkingBalance.toFixed(2)}`;
+        document.getElementById('availableBalanceExternal').textContent = `$${checkingBalance.toFixed(2)}`;
+        document.getElementById('availableBalanceBank').textContent = `$${checkingBalance.toFixed(2)}`;
+    } else {
+        document.getElementById('availableBalance').textContent = `$${savingsBalance.toFixed(2)}`;
+        document.getElementById('availableBalanceExternal').textContent = `$${savingsBalance.toFixed(2)}`;
+        document.getElementById('availableBalanceBank').textContent = `$${savingsBalance.toFixed(2)}`;
+    }
+    
+    return {
+        success: true,
+        newCheckingBalance: checkingBalance,
+        newSavingsBalance: savingsBalance
+    };
+}
+
+// Update form submission handlers to use the new function
+document.getElementById('internalTransferForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const transferData = {
+        fromAccount: document.getElementById('fromAccount').value,
+        toAccount: document.getElementById('toAccount').value,
+        amount: parseFloat(document.getElementById('amount').value),
+        memo: document.getElementById('memo').value,
+        date: document.getElementById('transferDate').value
+    };
+    
+    processWireTransfer(transferData);
+});
+
+document.getElementById('externalTransferForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const transferData = {
+        fromAccount: document.getElementById('fromAccountExternal').value,
+        toAccount: document.getElementById('recipientName').value + ' (' + document.getElementById('recipientAccount').value + ')',
+        amount: parseFloat(document.getElementById('amountExternal').value),
+        memo: document.getElementById('memoExternal').value
+    };
+    
+    processWireTransfer(transferData);
+});
+
+document.getElementById('externalBankTransferForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const transferData = {
+        fromAccount: document.getElementById('fromAccountBank').value,
+        toAccount: document.getElementById('recipientNameBank').value + ' at ' + 
+                  (document.getElementById('bankNameDisplay').textContent || 'External Bank'),
+        amount: parseFloat(document.getElementById('amountBank').value),
+        memo: document.getElementById('memoBank').value
+    };
+    
+    processWireTransfer(transferData);
+}); 
         // Set default date to today
         document.addEventListener('DOMContentLoaded', function() {
             const today = new Date().toISOString().split('T')[0];
