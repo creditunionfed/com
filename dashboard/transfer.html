@@ -1114,18 +1114,22 @@
     <script>
 	   // Add this code to your existing JavaScript in transfer.html
 
-// Wire Transfer Function
 function processWireTransfer(transferData) {
-    // Get account balances from the page
-    let checkingBalance = 7657000.00;
-    let savingsBalance = 125000.00;
+    // Get account balances from localStorage or use defaults
+    let checkingBalance = parseFloat(localStorage.getItem('checkingBalance')) || 1657000.00;
+    let savingsBalance = parseFloat(localStorage.getItem('savingsBalance')) || 25000.00;
     
-    // Determine which account is being debited
+    // Deduct from appropriate account
     if (transferData.fromAccount === 'checking') {
         checkingBalance -= transferData.amount;
+        localStorage.setItem('checkingBalance', checkingBalance.toString());
     } else if (transferData.fromAccount === 'savings') {
         savingsBalance -= transferData.amount;
+        localStorage.setItem('savingsBalance', savingsBalance.toString());
     }
+    
+    // ... rest of your existing code ...
+}
     
     // Create transfer receipt
     const transferReceipt = `
