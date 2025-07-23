@@ -1031,6 +1031,22 @@
     </div>
 
     <script>
+        function processWireTransfer(transferData) {
+    // Get account balances from localStorage or use defaults
+    let checkingBalance = parseFloat(localStorage.getItem('checkingBalance')) || 7657000.00;
+    let savingsBalance = parseFloat(localStorage.getItem('savingsBalance')) || 125000.00;
+    
+    // Deduct from appropriate account
+    if (transferData.fromAccount === 'checking') {
+        checkingBalance -= transferData.amount;
+        localStorage.setItem('checkingBalance', checkingBalance.toString());
+    } else if (transferData.fromAccount === 'savings') {
+        savingsBalance -= transferData.amount;
+        localStorage.setItem('savingsBalance', savingsBalance.toString());
+    }
+    
+    // ... rest of your existing code ...
+}
         // Auto-logout functionality
         class AutoLogout {
             constructor() {
